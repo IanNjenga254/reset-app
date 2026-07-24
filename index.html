@@ -19,6 +19,12 @@
   --foam:#CDEEEA;
   --sand:#E3C27C;
   --coral:#D98B6E;
+  --ember1:#3A0E02;
+  --ember2:#B8380D;
+  --flame1:#FF6B35;
+  --flame2:#FFB627;
+  --flame3:#FFEECC;
+  --blueflame:#6FD8FF;
   --radius:16px;
   --radius-sm:10px;
   --font-display: Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif;
@@ -40,6 +46,12 @@
   --foam:#0F5852;
   --sand:#A87E22;
   --coral:#B15A3C;
+  --ember1:#F4D9C6;
+  --ember2:#C1490F;
+  --flame1:#D9531E;
+  --flame2:#B8790A;
+  --flame3:#7A4A00;
+  --blueflame:#1E7FA8;
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
@@ -120,21 +132,44 @@ textarea{ resize:vertical; min-height:64px; }
 label.field{ display:block; font-size:0.76rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-faint); margin:10px 0 5px; }
 label.field:first-child{ margin-top:0; }
 
-/* Home hero: tide meter */
-.tide-hero{
+/* Home hero: flame */
+.flame-hero{
   position:relative; border-radius:var(--radius); overflow:hidden; border:1px solid var(--line);
-  background:linear-gradient(180deg, var(--bg-elev) 0%, var(--bg-elev-2) 100%);
+  background:radial-gradient(ellipse 120% 100% at 50% 120%, var(--ember1) 0%, var(--bg-elev) 55%, var(--bg-elev-2) 100%);
   margin-bottom:14px;
 }
-.tide-hero-inner{ display:flex; align-items:center; gap:18px; padding:22px; position:relative; z-index:2;}
-.tide-svg-wrap{ width:96px; height:132px; flex-shrink:0; position:relative; }
-.tide-stat .num{ font-size:2.6rem; line-height:1; font-family:var(--font-display); }
-.tide-stat .num .unit{ font-size:1rem; color:var(--text-dim); font-family:var(--font-body); margin-left:4px;}
-.tide-stat .label{ color:var(--text-dim); font-size:0.82rem; margin-top:4px; }
-.tide-next{ font-size:0.76rem; color:var(--text-faint); margin-top:8px; }
-.tide-hero-foot{
-  display:flex; justify-content:space-between; padding:10px 22px 16px; font-size:0.78rem; color:var(--text-dim); position:relative; z-index:2;
+.flame-hero-inner{ display:flex; align-items:center; gap:18px; padding:22px; position:relative; z-index:2;}
+.flame-canvas-wrap{ width:108px; height:150px; flex-shrink:0; position:relative; }
+.flame-canvas-wrap canvas{ width:100%; height:100%; display:block; }
+.flame-stat .num{ font-size:2.6rem; line-height:1; font-family:var(--font-display); background:linear-gradient(180deg, var(--flame3), var(--flame1)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.flame-stat .num .unit{ font-size:1rem; color:var(--text-dim); font-family:var(--font-body); margin-left:4px; -webkit-text-fill-color:var(--text-dim); }
+.flame-stat .label{ color:var(--text-dim); font-size:0.82rem; margin-top:4px; }
+.flame-rank{
+  display:inline-flex; align-items:center; gap:5px; font-size:0.72rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+  color:var(--flame2); margin-top:8px; padding:3px 10px; border-radius:99px; border:1px solid rgba(255,182,39,0.35); background:rgba(255,107,53,0.08);
 }
+.flame-next{ font-size:0.76rem; color:var(--text-faint); margin-top:8px; }
+.flame-hero-foot{
+  display:flex; justify-content:space-between; padding:10px 22px 16px; font-size:0.78rem; color:var(--text-dim); position:relative; z-index:2;
+  flex-wrap:wrap; gap:6px;
+}
+.flame-progress{ height:5px; background:var(--bg-elev-2); border-radius:99px; margin:0 22px 14px; overflow:hidden; position:relative; z-index:2; }
+.flame-progress-bar{ height:100%; background:linear-gradient(90deg, var(--flame1), var(--flame2)); border-radius:99px; transition:width .5s ease; }
+
+/* daily spark quote */
+.spark-card{
+  border:1px solid rgba(255,182,39,0.22); background:linear-gradient(135deg, rgba(255,107,53,0.06), rgba(255,182,39,0.03));
+}
+.spark-card .spark-label{ display:flex; align-items:center; gap:6px; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--flame2); font-weight:700; margin-bottom:8px; }
+.spark-quote{ font-family:var(--font-display); font-size:1.1rem; line-height:1.5; color:var(--text); }
+.spark-attr{ font-size:0.78rem; color:var(--text-faint); margin-top:8px; }
+
+/* resource cards */
+.res-item{ display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); align-items:flex-start; }
+.res-item:last-child{ border-bottom:none; }
+.res-icon{ width:34px;height:34px; border-radius:9px; background:var(--bg-elev-2); display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1rem; }
+.res-item .txt b{ display:block; font-size:0.9rem; }
+.res-item .txt .meta{ font-size:0.76rem; color:var(--text-faint); margin-top:1px; }
 
 /* badges */
 .badges{ display:flex; gap:10px; overflow-x:auto; padding:2px 2px 8px; }
@@ -145,7 +180,7 @@ label.field:first-child{ margin-top:0; }
   width:44px;height:44px;border-radius:50%; margin:0 auto 6px; display:flex;align-items:center;justify-content:center;
   border:1.5px solid var(--line-strong); background:var(--bg-elev-2); font-size:1rem;
 }
-.badge.unlocked .dot{ background:radial-gradient(circle at 35% 30%, var(--teal-light), var(--teal)); border-color:var(--teal-light); color:#04211E; }
+.badge.unlocked .dot{ background:radial-gradient(circle at 35% 30%, var(--flame2), var(--flame1)); border-color:var(--flame2); color:#2A0E00; box-shadow:0 0 12px rgba(255,107,53,0.45); }
 .badge.unlocked{ color:var(--text-dim); }
 
 /* heatmap */
@@ -297,7 +332,7 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
 
   <div class="topbar">
     <div class="brand">
-      <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><path d="M2 20c3 0 3-3 6-3s3 3 6 3 3-3 6-3 3 3 6 3" stroke="#3FA9A0" stroke-width="2" stroke-linecap="round"/><path d="M2 25c3 0 3-3 6-3s3 3 6 3 3-3 6-3 3 3 6 3" stroke="#7FD8CE" stroke-width="2" stroke-linecap="round" opacity="0.6"/><circle cx="16" cy="9" r="5" fill="#3FA9A0"/></svg>
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><path d="M16 2c1 5-5 6-5 11a5 5 0 0010 0c0-2-1-3-1-3s2 1 2 5a6 6 0 01-12 0c0-6 6-8 6-13z" fill="#FF6B35"/><path d="M16 12c.5 2-2 3-2 5.5a2.5 2.5 0 005 0c0-1-.5-1.5-.5-1.5s1 .5 1 2.5a3.5 3.5 0 01-7 0c0-3.5 3.5-4 3.5-6.5z" fill="#FFB627"/></svg>
       <h1 class="brand-name display">Reset<span class="sub">Day by day</span></h1>
     </div>
     <button class="icon-btn" id="themeToggle" aria-label="Toggle light and dark mode" title="Toggle theme">
@@ -307,20 +342,28 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
 
   <!-- HOME -->
   <div class="view active" id="view-home">
-    <div class="tide-hero">
-      <div class="tide-hero-inner">
-        <div class="tide-svg-wrap"><svg id="tideSvg" viewBox="0 0 96 132" width="96" height="132"></svg></div>
-        <div class="tide-stat">
+    <div class="flame-hero">
+      <div class="flame-hero-inner">
+        <div class="flame-canvas-wrap"><canvas id="flameCanvas" width="108" height="150"></canvas></div>
+        <div class="flame-stat">
           <div class="num" id="streakDaysNum">0<span class="unit">days</span></div>
           <div class="label">Current streak</div>
-          <div class="tide-next" id="tideNextLabel">—</div>
+          <div class="flame-rank" id="flameRankLabel">🔥 Spark</div>
+          <div class="flame-next" id="tideNextLabel">—</div>
         </div>
       </div>
-      <div class="tide-hero-foot">
+      <div class="flame-progress"><div class="flame-progress-bar" id="flameProgressBar" style="width:0%"></div></div>
+      <div class="flame-hero-foot">
         <span>Longest: <b class="mono" id="longestStat">0d</b></span>
         <span>Success rate: <b class="mono" id="successRateStat">—</b></span>
         <span>Clean days: <b class="mono" id="totalCleanStat">0</b></span>
       </div>
+    </div>
+
+    <div class="card spark-card">
+      <div class="spark-label">✦ Daily spark</div>
+      <div class="spark-quote" id="sparkQuoteTxt">—</div>
+      <button class="btn ghost" id="sparkShuffleBtn" style="margin-top:12px;">Another one</button>
     </div>
 
     <div class="card">
@@ -719,7 +762,7 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
     <div class="subview" id="l-resources">
       <div class="card">
         <h3>External resources</h3>
-        <p class="lead">Fill in your own — books, communities, hotlines.</p>
+        <p class="lead">A few starting points, plus room for your own. Remove anything that doesn't fit, add what does.</p>
         <div id="resourceList"></div>
         <div class="row" style="margin-top:12px;">
           <input type="text" id="resourceNewText" placeholder="Name" style="flex:1;">
@@ -831,7 +874,19 @@ function defaultData(){
       {id:"b3", text:"Some people report increased confidence in social situations"},
       {id:"b4", text:"Some people report feeling more present in relationships"}
     ],
-    resources: [],
+    resources: [
+      {id:"r1", type:"book", text:"Your Brain on Porn — Gary Wilson", url:""},
+      {id:"r2", type:"book", text:"Dopamine Nation — Anna Lembke", url:""},
+      {id:"r3", type:"book", text:"The Power of Habit — Charles Duhigg", url:""},
+      {id:"r4", type:"book", text:"Atomic Habits — James Clear", url:""},
+      {id:"r5", type:"video", text:"Dopamine Detox: Science-Based Way To Master Self Control & Break Addiction — Dr. K, Healthy Gamer", url:"https://www.youtube.com/watch?v=3NBYll6zGCI"},
+      {id:"r6", type:"video", text:"Addiction Explained, Rises & Falls in Dopamine — Andrew Huberman", url:"https://www.youtube.com/watch?v=lS3ddSQLLYs"},
+      {id:"r7", type:"video", text:"Controlling Your Dopamine for Motivation, Focus & Satisfaction — Huberman Lab", url:"https://www.youtube.com/watch?v=QmOF0crdyRU"},
+      {id:"r8", type:"community", text:"NoFap — community and tracker", url:"https://nofap.com"},
+      {id:"r9", type:"community", text:"r/pornfree — support community", url:"https://www.reddit.com/r/pornfree/"},
+      {id:"r10", type:"community", text:"Fight the New Drug — research and stories", url:"https://fightthenewdrug.org"},
+      {id:"r11", type:"hotline", text:"SAMHSA National Helpline (US, free, 24/7) — 1-800-662-4357", url:""}
+    ],
     why: "",
     partnerTemplate: "Hey — I'm working on quitting a habit I'm not proud of, and I could use someone in my corner. Would you be open to checking in with me once a week, just a quick \"how's it going\"? No judgment needed, just someone who knows what I'm working on.",
     settings: { urgePrompt:true, theme:"dark" }
@@ -915,6 +970,22 @@ const MILESTONES = [
   {days:14,label:"2 weeks"},{days:30,label:"1 month"},{days:90,label:"90 days"},
   {days:180,label:"6 months"},{days:365,label:"1 year"}
 ];
+const RANKS = [
+  {days:0, label:"Spark", emoji:"🔥"},
+  {days:3, label:"Ember", emoji:"🔥"},
+  {days:7, label:"Flame", emoji:"🔥"},
+  {days:14, label:"Blaze", emoji:"🔥"},
+  {days:30, label:"Bonfire", emoji:"🔥"},
+  {days:90, label:"Wildfire", emoji:"🔥"},
+  {days:180, label:"Inferno", emoji:"🔥"},
+  {days:365, label:"Eternal Flame", emoji:"💠"}
+];
+function currentRank(){
+  const cur = currentStreakDays();
+  let rank = RANKS[0];
+  for(const r of RANKS){ if(cur>=r.days) rank=r; }
+  return rank;
+}
 
 function lastRelapseDate(){
   if(DATA.relapses.length===0) return null;
@@ -966,49 +1037,179 @@ function nextMilestone(){
   return null;
 }
 
-/* ---------- tide SVG ---------- */
-function renderTideSvg(){
-  const svg = document.getElementById("tideSvg");
+/* ---------- flame canvas ---------- */
+let flameParticles = [];
+function initFlameParticles(intensity){
+  flameParticles = [];
+  const count = Math.round(24 + intensity*40);
+  for(let i=0;i<count;i++) flameParticles.push(makeFlameParticle(intensity, true));
+}
+function makeFlameParticle(intensity, seedRandomY){
+  const W=108;
+  return {
+    x: W/2 + (Math.random()-0.5)*22*(0.5+intensity),
+    y: seedRandomY ? Math.random()*140 : 148,
+    vy: -(0.6+Math.random()*1.1)*(0.6+intensity),
+    vx: (Math.random()-0.5)*0.6,
+    life: 0,
+    maxLife: 40+Math.random()*40,
+    size: (6+Math.random()*10)*(0.5+intensity*0.7)
+  };
+}
+function flameColorForIntensity(t, isEternal){
+  // t: 0 (base, cool ember) .. 1 (hot core)
+  if(isEternal){
+    const stops = ["#0B3A52","#1E7FA8","#6FD8FF","#EAFBFF"];
+    const idx = Math.min(stops.length-1, Math.floor(t*stops.length));
+    return stops[idx];
+  }
+  const stops = ["#3A0E02","#B8380D","#FF6B35","#FFB627","#FFEECC"];
+  const idx = Math.min(stops.length-1, Math.floor(t*stops.length));
+  return stops[idx];
+}
+function renderFlame(){
+  const canvas = document.getElementById("flameCanvas");
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
   const cur = currentStreakDays();
+  const rank = currentRank();
+  const isEternal = rank.label==="Eternal Flame";
   const nm = nextMilestone();
   const prevThreshold = (()=>{ let p=0; for(const m of MILESTONES){ if(m.days>cur) break; p=m.days;} return p; })();
   const target = nm ? nm.days : Math.max(cur,1);
   const span = Math.max(1, target - prevThreshold);
   const progress = Math.min(1, (cur - prevThreshold)/span);
-  const H=132, W=96;
-  const waterY = H - (progress*(H-14)) - 4;
-  const isLight = document.documentElement.classList.contains("light");
-  const waterColor = isLight ? "#2C8D84" : "#3FA9A0";
-  const foamColor = isLight ? "#0F5852" : "#7FD8CE";
-  svg.innerHTML = `
-    <defs>
-      <clipPath id="tideClip"><rect x="4" y="4" width="${W-8}" height="${H-8}" rx="14"/></clipPath>
-      <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="${foamColor}" stop-opacity="0.9"/>
-        <stop offset="100%" stop-color="${waterColor}" stop-opacity="0.95"/>
-      </linearGradient>
-    </defs>
-    <rect x="4" y="4" width="${W-8}" height="${H-8}" rx="14" fill="none" stroke="${isLight?'#0F585233':'#7FD8CE33'}" stroke-width="2"/>
-    <g clip-path="url(#tideClip)">
-      <path id="wavePath" d="M0,${waterY} Q ${W*0.25},${waterY-6} ${W*0.5},${waterY} T ${W},${waterY} V ${H} H 0 Z" fill="url(#waterGrad)"/>
-    </g>
-    <text x="${W/2}" y="${H/2+6}" text-anchor="middle" font-size="15" font-weight="700" fill="${progress>0.42?'#04211E':(isLight?'#12242A':'#E7EEF2')}" font-family="ui-monospace,monospace">${cur}d</text>
-  `;
-  // gentle animation
-  const path = svg.querySelector("#wavePath");
-  if(path && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    let t=0;
-    if(window.__tideAnim) cancelAnimationFrame(window.__tideAnim);
-    function anim(){
-      t+=0.02;
-      const off = Math.sin(t)*3;
-      path.setAttribute("d", `M0,${waterY+off} Q ${W*0.25},${waterY-6+off} ${W*0.5},${waterY+off} T ${W},${waterY+off} V ${H} H 0 Z`);
-      window.__tideAnim = requestAnimationFrame(anim);
-    }
-    anim();
+  const intensity = Math.min(1, 0.25 + Math.log2(cur+1)/9); // grows with streak, caps out
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if(flameParticles.length===0) initFlameParticles(intensity);
+
+  function frame(){
+    const W=canvas.width, H=canvas.height;
+    ctx.clearRect(0,0,W,H);
+    // base glow
+    const grad = ctx.createRadialGradient(W/2,H-20,4,W/2,H-20,60);
+    grad.addColorStop(0, isEternal?"rgba(111,216,255,0.35)":"rgba(255,107,53,0.35)");
+    grad.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0,0,W,H);
+
+    flameParticles.forEach(p=>{
+      p.life++;
+      if(!reduced){
+        p.y += p.vy; p.x += p.vx;
+      }
+      const t = 1 - (p.life/p.maxLife);
+      if(t<=0 || p.y < 10){
+        Object.assign(p, makeFlameParticle(intensity, false));
+        return;
+      }
+      const heat = Math.min(1, (H-p.y)/H * 1.3);
+      ctx.beginPath();
+      const r = Math.max(0.5, p.size * t * (0.4+intensity*0.6));
+      ctx.arc(p.x, p.y, r, 0, Math.PI*2);
+      ctx.fillStyle = flameColorForIntensity(heat, isEternal);
+      ctx.globalAlpha = 0.55*t + 0.15;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+
+    // streak number
+    ctx.font = "700 16px ui-monospace, monospace";
+    ctx.textAlign = "center";
+    ctx.fillStyle = isEternal ? "#EAFBFF" : "#FFEECC";
+    ctx.shadowColor = isEternal ? "rgba(111,216,255,0.8)" : "rgba(255,107,53,0.8)";
+    ctx.shadowBlur = 8;
+    ctx.fillText(cur+"d", W/2, H-14);
+    ctx.shadowBlur = 0;
+
+    if(!reduced){ window.__flameAnim = requestAnimationFrame(frame); }
   }
+  if(window.__flameAnim) cancelAnimationFrame(window.__flameAnim);
+  if(reduced){ frame(); } else { frame(); }
+
+  document.getElementById("flameRankLabel").innerHTML = `${rank.emoji} ${rank.label}`;
+  document.getElementById("flameProgressBar").style.width = Math.round(progress*100)+"%";
   document.getElementById("tideNextLabel").textContent = nm ? `${nm.days-cur} day${nm.days-cur===1?'':'s'} to ${nm.label}` : "All milestones unlocked";
 }
+
+/* ---------- milestone celebration ---------- */
+function checkMilestoneCelebration(){
+  const cur = currentStreakDays();
+  const unlocked = MILESTONES.filter(m=>cur>=m.days).map(m=>m.days);
+  const seen = DATA.__seenMilestones || [];
+  const fresh = unlocked.filter(d=>!seen.includes(d));
+  if(fresh.length>0){
+    const top = Math.max(...fresh);
+    const m = MILESTONES.find(x=>x.days===top);
+    DATA.__seenMilestones = unlocked;
+    save();
+    showToast(`🔥 Milestone reached — ${m.label}`);
+  } else if(seen.length!==unlocked.length){
+    DATA.__seenMilestones = unlocked;
+    save();
+  }
+}
+
+/* ---------- daily spark quotes ---------- */
+const SPARK_QUOTES = [
+  "You don't have to feel motivated. You just have to take the next small action.",
+  "A slip is a data point, not a verdict on who you are.",
+  "The urge is loud, but it's also short. Outlast it.",
+  "Progress isn't a straight line — it's a streak with a memory.",
+  "Every day you didn't act on it, you proved it's not in control.",
+  "You're not fighting a habit. You're building a different one.",
+  "The version of you a year from now is built in moments exactly like this one.",
+  "Boredom is a signal, not a command.",
+  "Discomfort now is cheaper than regret later.",
+  "You've already survived every urge you've ever had. This one's no different.",
+  "Small and consistent beats big and occasional.",
+  "The craving will peak, then it will fall. It always does.",
+  "You are allowed to start again, as many times as it takes.",
+  "What you repeat, you become. Choose the repeat.",
+  "Nobody sees the hardest five minutes. You do it anyway.",
+  "Distance from the trigger is easier to find than willpower in the moment.",
+  "The goal isn't perfection. It's a longer average.",
+  "Rest counts as progress too.",
+  "You're allowed to be proud of a hard day that didn't turn into a slip.",
+  "The habit loop breaks easiest at the cue — catch it early.",
+  "One honest relapse log is worth more than ten silent slips.",
+  "Today doesn't have to be perfect. It just has to be honest.",
+  "The version of you who wants out is louder than the version who wants in — trust that one.",
+  "Momentum is built by the days no one's watching.",
+  "You control what you do next far more than what you feel right now.",
+  "A plan made in a calm moment protects the you in a hard one.",
+  "This isn't about willpower alone — it's about making the hard thing harder to reach.",
+  "Every rebuilt streak is still real progress, not a reset to zero.",
+  "The urge wants your attention, not necessarily your action.",
+  "Naming the trigger takes some of its power away.",
+  "Freedom is boring sometimes. That's allowed to be okay.",
+  "You are not the worst thing you've done on your hardest day.",
+  "Cravings are weather, not climate — they pass through.",
+  "Ten more minutes of discomfort is a fair trade for a clean day.",
+  "The story you tell about a slip matters more than the slip itself.",
+  "You're allowed to ask for help before you're desperate for it.",
+  "Consistency compounds quietly, then all at once.",
+  "You are building evidence, day by day, that you can do this.",
+  "The person you're becoming is worth the next uncomfortable minute.",
+  "It's not about never wanting to. It's about what you do next.",
+  "However today went, tomorrow is still yours to choose."
+];
+function dayOfYear(){
+  const now=new Date();
+  const start=new Date(now.getFullYear(),0,0);
+  return Math.floor((now-start)/86400000);
+}
+function renderSparkQuote(idxOverride){
+  const idx = idxOverride!==undefined ? idxOverride : (dayOfYear() % SPARK_QUOTES.length);
+  document.getElementById("sparkQuoteTxt").textContent = SPARK_QUOTES[idx];
+  window.__sparkIdx = idx;
+}
+document.getElementById("sparkShuffleBtn").addEventListener("click", ()=>{
+  let idx;
+  do{ idx = Math.floor(Math.random()*SPARK_QUOTES.length); }while(idx===window.__sparkIdx && SPARK_QUOTES.length>1);
+  renderSparkQuote(idx);
+});
 
 /* ---------- home render ---------- */
 function renderHome(){
@@ -1017,7 +1218,9 @@ function renderHome(){
   const sr = successRate();
   document.getElementById("successRateStat").textContent = sr===null ? "—" : sr+"%";
   document.getElementById("totalCleanStat").textContent = totalCleanDays();
-  renderTideSvg();
+  renderFlame();
+  checkMilestoneCelebration();
+  if(window.__sparkIdx===undefined) renderSparkQuote();
   renderBadges();
   renderHeatmap(window.__heatmapRange || 13);
   renderTrend();
@@ -1696,18 +1899,24 @@ document.getElementById("benefitsList").addEventListener("click",(e)=>{
 });
 
 /* ---------- resources ---------- */
+const RES_ICONS = {book:"📖", video:"▶", community:"👥", hotline:"☎", link:"🔗"};
 function renderResources(){
   const el = document.getElementById("resourceList");
   if(DATA.resources.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>Add books, communities, or hotlines you trust.</div>'; return; }
   el.innerHTML = DATA.resources.map(r=>`
-    <div class="list-item"><div class="txt">${r.url?`<a href="${escapeAttr(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.text)}</a>`:escapeHtml(r.text)}</div>
-    <button class="icon-x resDel" data-id="${r.id}">&times;</button></div>
+    <div class="res-item">
+      <div class="res-icon">${RES_ICONS[r.type]||RES_ICONS.link}</div>
+      <div class="txt" style="flex:1;"><b>${r.url?`<a href="${escapeAttr(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.text)}</a>`:escapeHtml(r.text)}</b></div>
+      <button class="icon-x resDel" data-id="${r.id}">&times;</button>
+    </div>
   `).join("");
 }
 document.getElementById("resourceAddBtn").addEventListener("click", ()=>{
   const textEl = document.getElementById("resourceNewText"), urlEl = document.getElementById("resourceNewUrl");
   const text = textEl.value.trim(); if(!text) return;
-  DATA.resources.push({id:uid(), text, url:urlEl.value.trim()});
+  const url = urlEl.value.trim();
+  const type = /youtube\.com|youtu\.be/.test(url) ? "video" : (url ? "link" : "book");
+  DATA.resources.push({id:uid(), type, text, url});
   textEl.value=""; urlEl.value="";
   save(); renderResources();
 });
