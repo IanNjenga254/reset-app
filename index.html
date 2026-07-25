@@ -346,6 +346,62 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
 .fab-urge:active{ transform:scale(0.92); }
 .fab-urge svg{ width:24px;height:24px; }
 
+/* crisis button accent */
+.crisis-btn{ color:var(--coral); border-color:rgba(217,139,110,0.35); }
+.crisis-btn:hover{ color:var(--coral); border-color:var(--coral); }
+
+/* tracker switcher */
+.tracker-switcher{ display:flex; gap:8px; overflow-x:auto; padding:2px 2px 12px; }
+.tracker-chip{
+  flex-shrink:0; display:flex; align-items:center; gap:6px; background:var(--bg-elev); border:1px solid var(--line);
+  color:var(--text-dim); padding:8px 14px; border-radius:99px; font-size:0.82rem; cursor:pointer; white-space:nowrap;
+}
+.tracker-chip.active{ background:var(--teal); border-color:var(--teal); color:#04211E; font-weight:600; }
+.tracker-chip.add-chip{ color:var(--teal-light); border-style:dashed; }
+
+/* category picker grid (onboarding + add-track flow) */
+.cat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:10px 0 4px; }
+@media (max-width:420px){ .cat-grid{ grid-template-columns:1fr; } }
+.cat-opt{
+  display:flex; align-items:center; gap:8px; background:var(--bg-elev-2); border:1px solid var(--line-strong);
+  color:var(--text); padding:10px 12px; border-radius:var(--radius-sm); font-size:0.84rem; cursor:pointer; text-align:left;
+}
+.cat-opt.selected{ border-color:var(--teal); background:rgba(63,169,160,0.12); color:var(--teal-light); font-weight:600; }
+.cat-group-label{ font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-faint); margin:14px 0 6px; }
+.cat-group-label:first-child{ margin-top:0; }
+
+/* onboarding backdrop: like modal-backdrop but not dismissible via outside click */
+.onboard-backdrop{
+  position:fixed; inset:0; background:rgba(3,10,16,0.86); z-index:70; display:none;
+  align-items:center; justify-content:center; padding:20px;
+}
+.onboard-backdrop.open{ display:flex; }
+.onboard-modal{
+  background:var(--bg-elev); border:1px solid var(--line-strong); border-radius:var(--radius);
+  width:100%; max-width:520px; padding:24px 20px; max-height:88vh; overflow-y:auto;
+}
+
+/* ambient sound pill */
+.ambient-pill{
+  position:fixed; left:16px; bottom:calc(78px + var(--safe-bottom)); z-index:12;
+  display:flex; align-items:center; gap:8px; background:var(--bg-elev); border:1px solid var(--line-strong);
+  border-radius:99px; padding:8px 12px; box-shadow:0 6px 18px rgba(0,0,0,0.25);
+  max-width:56px; overflow:hidden; transition:max-width .25s ease;
+}
+.ambient-pill.expanded{ max-width:220px; }
+.ambient-toggle{ background:none; border:none; color:var(--text-dim); cursor:pointer; width:26px; height:26px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.ambient-toggle.playing{ color:var(--teal-light); }
+.ambient-toggle svg{ width:18px; height:18px; }
+.ambient-pill input[type=range]{ width:110px; flex-shrink:0; }
+.track-item{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:12px 0; border-bottom:1px solid var(--line); }
+.track-item:last-child{ border-bottom:none; }
+.track-item .txt{ flex:1; font-size:0.9rem; }
+.track-item .meta{ font-size:0.76rem; color:var(--text-faint); margin-top:2px; }
+.withdrawal-warning{
+  background:rgba(217,139,110,0.1); border:1px solid rgba(217,139,110,0.4); border-radius:var(--radius-sm);
+  padding:14px; font-size:0.86rem; color:var(--coral); line-height:1.55; font-weight:500; margin-bottom:14px;
+}
+
 /* video library */
 .video-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 @media (max-width:460px){ .video-grid{ grid-template-columns:1fr; } }
@@ -391,13 +447,20 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
       <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><path d="M16 2c1 5-5 6-5 11a5 5 0 0010 0c0-2-1-3-1-3s2 1 2 5a6 6 0 01-12 0c0-6 6-8 6-13z" fill="#FF6B35"/><path d="M16 12c.5 2-2 3-2 5.5a2.5 2.5 0 005 0c0-1-.5-1.5-.5-1.5s1 .5 1 2.5a3.5 3.5 0 01-7 0c0-3.5 3.5-4 3.5-6.5z" fill="#FFB627"/></svg>
       <h1 class="brand-name display">Reset<span class="sub">Day by day</span></h1>
     </div>
-    <button class="icon-btn" id="themeToggle" aria-label="Toggle light and dark mode" title="Toggle theme">
-      <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
+    <div class="row" style="gap:8px;">
+      <button class="icon-btn crisis-btn" id="crisisBtn" aria-label="Need help now — crisis resources" title="Need help now?">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </button>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle light and dark mode" title="Toggle theme">
+        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
   </div>
 
   <!-- HOME -->
   <div class="view active" id="view-home">
+    <div class="tracker-switcher" id="trackerSwitcher"></div>
+
     <div class="flame-hero">
       <div class="flame-hero-inner">
         <div class="flame-canvas-wrap"><canvas id="flameCanvas" width="108" height="150"></canvas></div>
@@ -860,7 +923,20 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
   <!-- SETTINGS -->
   <div class="view" id="view-settings">
     <div class="card">
+      <h3>About Reset</h3>
+      <p class="lead">Reset is a self-directed support tool, not a replacement for professional medical, psychiatric, or addiction care. If you're able to see a doctor, therapist, or counselor, this app works best alongside that — not instead of it.</p>
+    </div>
+
+    <div class="card">
+      <h3>Your tracks</h3>
+      <p class="lead">Everything you're working on, tracked separately. Switch between them from the chips on Home.</p>
+      <div id="tracksSettingsList"></div>
+      <button class="btn secondary block" id="addTrackBtn" style="margin-top:12px;">+ Add a track</button>
+    </div>
+
+    <div class="card">
       <h3>Check-in flow</h3>
+      <p class="lead">Applies to the currently active track.</p>
       <div class="switch-row">
         <div><div class="txt">Ask urge intensity on daily check-in</div><div class="desc">Turn off for a lighter, faster flow.</div></div>
         <label class="switch"><input type="checkbox" id="settingUrgePrompt" checked><span class="slider-track"></span></label>
@@ -872,8 +948,26 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
     </div>
 
     <div class="card">
+      <h3>Ambient sound</h3>
+      <p class="lead">Default volume for the floating sound control (bottom-left, on every screen).</p>
+      <div class="slider-row"><input type="range" id="settingAmbientVolume" min="0" max="1" step="0.05" value="0.5"><span class="slider-val mono" id="settingAmbientVolumeVal">50%</span></div>
+    </div>
+
+    <div class="card">
+      <h3>Crisis & local support</h3>
+      <p class="lead">Save your own local emergency number and a helpline you trust, once — it'll appear as a one-tap button in the "Need help now?" panel from anywhere in the app.</p>
+      <label class="field">Local emergency number</label>
+      <input type="text" id="emergencyNumber" placeholder="e.g. 911, 999, 112…">
+      <label class="field">Local helpline name</label>
+      <input type="text" id="emergencyHelplineName" placeholder="e.g. a national helpline you trust">
+      <label class="field">Local helpline link or number</label>
+      <input type="text" id="emergencyHelplineLink" placeholder="URL or phone number">
+      <button class="btn secondary block" id="emergencySaveBtn" style="margin-top:12px;">Save</button>
+    </div>
+
+    <div class="card">
       <h3>Your data</h3>
-      <p class="lead">Everything stays on this device — nothing is sent anywhere. localStorage can be cleared by the browser, so back up if this matters to you.</p>
+      <p class="lead">Everything stays on this device — nothing is sent anywhere, ever. This is sensitive information, and it never leaves your browser's local storage. localStorage can be cleared by the browser, so back up if this matters to you.</p>
       <div class="row">
         <button class="btn secondary" id="exportBtn">Export backup (JSON)</button>
         <button class="btn secondary" id="importBtn">Import backup</button>
@@ -883,7 +977,7 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
 
     <div class="card">
       <h3>Reset everything</h3>
-      <p class="lead">Clears all streaks, journal entries, logs, and settings on this device. This is separate from exporting — export first if you want to keep a copy.</p>
+      <p class="lead">Clears all tracks, streaks, journal entries, logs, and settings on this device. This is separate from exporting — export first if you want to keep a copy.</p>
       <button class="btn warn block" id="resetAllBtn">Clear all data</button>
     </div>
   </div>
@@ -904,6 +998,14 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
   <svg viewBox="0 0 32 32" fill="none"><path d="M16 2c1 5-5 6-5 11a5 5 0 0010 0c0-2-1-3-1-3s2 1 2 5a6 6 0 01-12 0c0-6 6-8 6-13z" fill="currentColor"/></svg>
 </button>
 
+<div class="ambient-pill" id="ambientPill">
+  <button class="ambient-toggle" id="ambientToggleBtn" aria-label="Play ambient sound" title="Ambient sound">
+    <svg id="ambientIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
+  </button>
+  <input type="range" id="ambientVolume" min="0" max="1" step="0.05" value="0.5">
+</div>
+<audio id="ambientAudio" loop preload="none"></audio>
+
 <!-- Urge flow modal -->
 <div class="modal-backdrop" id="urgeModalBackdrop">
   <div class="modal">
@@ -922,6 +1024,23 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
   </div>
 </div>
 
+<!-- Crisis / resources modal — reachable from anywhere -->
+<div class="modal-backdrop" id="crisisModalBackdrop">
+  <div class="modal">
+    <button class="modal-close" id="crisisModalClose" aria-label="Close">&times;</button>
+    <h3>Need help now?</h3>
+    <div id="crisisModalBody"></div>
+  </div>
+</div>
+
+<!-- Onboarding — blocking until at least one track is added -->
+<div class="onboard-backdrop" id="onboardBackdrop">
+  <div class="onboard-modal">
+    <h3 class="display" style="margin-top:0;">Welcome to Reset</h3>
+    <div id="onboardBody"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -929,18 +1048,89 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
 "use strict";
 
 /* ---------- storage ---------- */
-const STORAGE_KEY = "reset_app_data_v1";
+const STORAGE_KEY = "reset_app_data_v2";
+const LEGACY_STORAGE_KEY = "reset_app_data_v1";
 const todayStr = () => new Date().toISOString().slice(0,10);
+function uid(){ return Math.random().toString(36).slice(2,9); }
 
-function defaultData(){
+/* Categories a tracker can belong to. Behavioral categories keep the
+   original screen/porn tone; substance categories unlock withdrawal /
+   overdose / doctor-conversation guides. */
+const TRACKER_CATEGORIES = [
+  {key:"alcohol", label:"Alcohol", kind:"substance"},
+  {key:"opioids", label:"Opioids", kind:"substance"},
+  {key:"stimulants", label:"Stimulants", kind:"substance"},
+  {key:"sedatives", label:"Sedatives / benzodiazepines", kind:"substance"},
+  {key:"cannabis", label:"Cannabis", kind:"substance"},
+  {key:"substance_other", label:"Other substance", kind:"substance"},
+  {key:"pornography", label:"Pornography / compulsive sexual behavior", kind:"behavioral"},
+  {key:"gambling", label:"Gambling", kind:"behavioral"},
+  {key:"gaming", label:"Gaming", kind:"behavioral"},
+  {key:"social", label:"Social media / screens", kind:"behavioral"},
+  {key:"shopping", label:"Shopping / spending", kind:"behavioral"},
+  {key:"behavioral_other", label:"Other behavior", kind:"behavioral"}
+];
+function categoryMeta(key){ return TRACKER_CATEGORIES.find(c=>c.key===key) || TRACKER_CATEGORIES[TRACKER_CATEGORIES.length-1]; }
+// alcohol & sedatives carry the withdrawal-danger warning (rule #2)
+const WITHDRAWAL_RISK_CATS = new Set(["alcohol","sedatives"]);
+// categories where an environment/DNS/app-blocker style guide still applies
+const BLOCKER_RELEVANT_CATS = new Set(["pornography","gaming","social","gambling","substance_other","behavioral_other"]);
+
+function defaultResourcesFor(catKey){
+  const shared = [
+    {id:uid(), type:"community", text:"SMART Recovery — free, secular, evidence-based, any addictive behavior", url:"https://www.smartrecovery.org"}
+  ];
+  if(catKey==="pornography"){
+    return shared.concat([
+      {id:uid(), type:"book", text:"Your Brain on Porn — Gary Wilson", url:""},
+      {id:uid(), type:"book", text:"Dopamine Nation — Anna Lembke", url:""},
+      {id:uid(), type:"book", text:"The Power of Habit — Charles Duhigg", url:""},
+      {id:uid(), type:"book", text:"Atomic Habits — James Clear", url:""},
+      {id:uid(), type:"video", text:"Dopamine Detox: Science-Based Way To Master Self Control & Break Addiction — Dr. K, Healthy Gamer", url:"https://www.youtube.com/watch?v=3NBYll6zGCI"},
+      {id:uid(), type:"video", text:"Addiction Explained, Rises & Falls in Dopamine — Andrew Huberman", url:"https://www.youtube.com/watch?v=lS3ddSQLLYs"},
+      {id:uid(), type:"video", text:"Controlling Your Dopamine for Motivation, Focus & Satisfaction — Huberman Lab", url:"https://www.youtube.com/watch?v=QmOF0crdyRU"},
+      {id:uid(), type:"community", text:"NoFap — community and tracker", url:"https://nofap.com"},
+      {id:uid(), type:"community", text:"r/pornfree — support community", url:"https://www.reddit.com/r/pornfree/"},
+      {id:uid(), type:"community", text:"Fight the New Drug — research and stories", url:"https://fightthenewdrug.org"}
+    ]);
+  }
+  if(catKey==="alcohol" || catKey==="opioids" || catKey==="stimulants" || catKey==="sedatives" || catKey==="cannabis" || catKey==="substance_other"){
+    return shared.concat([
+      {id:uid(), type:"community", text:"Alcoholics Anonymous — worldwide fellowship & meeting finder", url:"https://www.aa.org"},
+      {id:uid(), type:"community", text:"Narcotics Anonymous — worldwide fellowship & meeting finder", url:"https://www.na.org"},
+      {id:uid(), type:"book", text:"Dopamine Nation — Anna Lembke", url:""}
+    ]);
+  }
+  if(catKey==="gambling"){
+    return shared.concat([
+      {id:uid(), type:"community", text:"Gamblers Anonymous", url:"https://www.gamblersanonymous.org"}
+    ]);
+  }
+  return shared;
+}
+
+function defaultTracker(catKey, label, goalType){
+  const meta = categoryMeta(catKey);
   return {
-    firstUse: todayStr(),
-    checkins: {},          // date -> {clean:bool, urgeIntensity:num|null}
-    journal: {},           // date -> {mood,energy,urge,trigger,helped}
-    relapses: [],          // {date,time,trigger,mood,sleep,intensity,note,loggedAt}
-    urgeEntries: [],        // {date,time,intensity,tool,outcome}
-    triggers: [],           // {id,text,cat}
-    plans: [],               // {id,ifText,thenText,triggerId}
+    id: uid(),
+    category: catKey,
+    label: label || meta.label,
+    goalType: goalType || "abstinence",     // abstinence | moderation | harm_reduction
+    goalDetail: "",
+    startDate: todayStr(),
+    why: "",
+    benefits: catKey==="pornography" ? [
+      {id:"b1", text:"Some people report improved focus after a few weeks"},
+      {id:"b2", text:"Some people report more energy and better sleep"},
+      {id:"b3", text:"Some people report increased confidence in social situations"},
+      {id:"b4", text:"Some people report feeling more present in relationships"}
+    ] : [],
+    triggers: [],
+    relapseLog: [],
+    urgeEntries: [],
+    journalEntries: {},                    // date -> {mood,energy,urge,trigger,helped}
+    checkins: {},                          // date -> {clean,urgeIntensity}
+    plans: [],
     distractions: ["Take a short walk","Call a friend","Cold water on your face","Push-ups or a quick workout","Tidy one small area","Listen to a full album","Journal for 5 minutes","Step outside"],
     physicalChecklist: [
       {id:"p1", text:"Cold water on face", done:false},
@@ -949,51 +1139,370 @@ function defaultData(){
       {id:"p4", text:"Walk outside", done:false}
     ],
     physicalResetDate: todayStr(),
-    envAudit: [
+    envAudit: BLOCKER_RELEVANT_CATS.has(catKey) ? [
       {id:"a1", text:"Phone charges outside the bedroom", done:false},
       {id:"a2", text:"Blockers installed and locked", done:false},
       {id:"a3", text:"Accountability partner set up", done:false},
       {id:"a4", text:"Browser autofill / history reviewed", done:false}
+    ] : [
+      {id:"a1", text:"Removed easy access / supply from home", done:false},
+      {id:"a2", text:"Safe disposal of anything left over", done:false},
+      {id:"a3", text:"Accountability partner set up", done:false},
+      {id:"a4", text:"Identified specific people/places I'll avoid for now", done:false}
     ],
-    benefits: [
-      {id:"b1", text:"Some people report improved focus after a few weeks"},
-      {id:"b2", text:"Some people report more energy and better sleep"},
-      {id:"b3", text:"Some people report increased confidence in social situations"},
-      {id:"b4", text:"Some people report feeling more present in relationships"}
-    ],
-    resources: [
-      {id:"r1", type:"book", text:"Your Brain on Porn — Gary Wilson", url:""},
-      {id:"r2", type:"book", text:"Dopamine Nation — Anna Lembke", url:""},
-      {id:"r3", type:"book", text:"The Power of Habit — Charles Duhigg", url:""},
-      {id:"r4", type:"book", text:"Atomic Habits — James Clear", url:""},
-      {id:"r5", type:"video", text:"Dopamine Detox: Science-Based Way To Master Self Control & Break Addiction — Dr. K, Healthy Gamer", url:"https://www.youtube.com/watch?v=3NBYll6zGCI"},
-      {id:"r6", type:"video", text:"Addiction Explained, Rises & Falls in Dopamine — Andrew Huberman", url:"https://www.youtube.com/watch?v=lS3ddSQLLYs"},
-      {id:"r7", type:"video", text:"Controlling Your Dopamine for Motivation, Focus & Satisfaction — Huberman Lab", url:"https://www.youtube.com/watch?v=QmOF0crdyRU"},
-      {id:"r8", type:"community", text:"NoFap — community and tracker", url:"https://nofap.com"},
-      {id:"r9", type:"community", text:"r/pornfree — support community", url:"https://www.reddit.com/r/pornfree/"},
-      {id:"r10", type:"community", text:"Fight the New Drug — research and stories", url:"https://fightthenewdrug.org"},
-      {id:"r11", type:"hotline", text:"SAMHSA National Helpline (US, free, 24/7) — 1-800-662-4357", url:""}
-    ],
-    why: "",
+    rpPlan: { triggers:"", warningSigns:"", copingTools:"", whoToCall:"" },
+    seenMilestones: [],
+    resources: defaultResourcesFor(catKey),
     partnerTemplate: "Hey — I'm working on quitting a habit I'm not proud of, and I could use someone in my corner. Would you be open to checking in with me once a week, just a quick \"how's it going\"? No judgment needed, just someone who knows what I'm working on.",
-    settings: { urgePrompt:true, theme:"dark" }
+    settings: { urgePrompt:true }
   };
+}
+
+function defaultData(){
+  return {
+    schemaVersion: 2,
+    trackers: [],
+    activeTrackerId: null,
+    library: {},
+    ambient: { on:false, volume:0.5, track:"waves" },
+    emergency: { localNumber:"", localHelplineName:"", localHelplineLink:"" },
+    settings: { theme:"dark" }
+  };
+}
+
+/* Migrate a pre-tracker (v1, flat) save into a single "pornography"
+   tracker so existing streaks/journal/relapse history survive untouched. */
+function migrateV1(old){
+  const fresh = defaultData();
+  const t = defaultTracker("pornography", "Pornography", "abstinence");
+  t.startDate = old.firstUse || todayStr();
+  t.checkins = old.checkins || {};
+  t.journalEntries = old.journal || {};
+  t.relapseLog = old.relapses || [];
+  t.urgeEntries = old.urgeEntries || [];
+  t.triggers = old.triggers || [];
+  t.plans = old.plans || [];
+  t.distractions = old.distractions || t.distractions;
+  t.physicalChecklist = old.physicalChecklist || t.physicalChecklist;
+  t.physicalResetDate = old.physicalResetDate || todayStr();
+  t.envAudit = old.envAudit || t.envAudit;
+  t.benefits = old.benefits || t.benefits;
+  t.resources = old.resources || t.resources;
+  t.why = old.why || "";
+  t.partnerTemplate = old.partnerTemplate || t.partnerTemplate;
+  t.settings.urgePrompt = old.settings ? !!old.settings.urgePrompt : true;
+  fresh.trackers = [t];
+  fresh.activeTrackerId = t.id;
+  fresh.settings.theme = (old.settings && old.settings.theme) || "dark";
+  return fresh;
 }
 
 let DATA = load();
 function load(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return defaultData();
-    const parsed = JSON.parse(raw);
-    return Object.assign(defaultData(), parsed);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      const merged = Object.assign(defaultData(), parsed);
+      merged.trackers = Array.isArray(parsed.trackers) ? parsed.trackers : [];
+      return merged;
+    }
+    // no v2 data yet — check for a legacy v1 single-behavior save to migrate
+    const legacyRaw = localStorage.getItem(LEGACY_STORAGE_KEY);
+    if(legacyRaw){
+      const legacy = JSON.parse(legacyRaw);
+      const migrated = migrateV1(legacy);
+      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated)); }catch(e){}
+      return migrated;
+    }
+    return defaultData();
   }catch(e){ return defaultData(); }
 }
 function save(){
   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA)); }
   catch(e){ showToast("Couldn't save — storage may be full or blocked."); }
 }
-function uid(){ return Math.random().toString(36).slice(2,9); }
+function activeTracker(){
+  if(!DATA.trackers.length) return null;
+  return DATA.trackers.find(t=>t.id===DATA.activeTrackerId) || DATA.trackers[0];
+}
+const AT = activeTracker; // short alias used throughout
+
+/* ---------- category picker (shared by onboarding + add-track flow) ---------- */
+function categoryGridHtml(selectedKeys){
+  selectedKeys = selectedKeys || [];
+  const groups = [
+    {label:"Substances", items:TRACKER_CATEGORIES.filter(c=>c.kind==="substance")},
+    {label:"Behaviors", items:TRACKER_CATEGORIES.filter(c=>c.kind==="behavioral")}
+  ];
+  return groups.map(g=>`
+    <div class="cat-group-label">${g.label}</div>
+    <div class="cat-grid">
+      ${g.items.map(c=>`<button type="button" class="cat-opt ${selectedKeys.includes(c.key)?'selected':''}" data-cat="${c.key}">${escapeHtml(c.label)}</button>`).join("")}
+    </div>
+  `).join("");
+}
+function goalTypeSelectHtml(id, value){
+  value = value || "abstinence";
+  const opts = [
+    {v:"abstinence", l:"Quit completely"},
+    {v:"moderation", l:"Cut down to a limit"},
+    {v:"harm_reduction", l:"Stay safer while using"}
+  ];
+  return `<select id="${id}">${opts.map(o=>`<option value="${o.v}" ${o.v===value?"selected":""}>${o.l}</option>`).join("")}</select>`;
+}
+
+/* ---------- onboarding (blocking until at least one track exists) ---------- */
+function showOnboarding(){
+  document.getElementById("onboardBackdrop").classList.add("open");
+  const selected = new Set();
+  document.getElementById("onboardBody").innerHTML = `
+    <p class="lead">Reset is a private, on-device tool for working on any addiction — substances or behaviors, one or several at once. Nothing you enter here ever leaves this browser.</p>
+    <p class="lead">This app supports you alongside professional care, and isn't a replacement for it. If you're in immediate danger, use the "Need help now?" button (top right) any time.</p>
+    <label class="field">What are you working on? (pick one or more)</label>
+    <div id="onboardCatGrid">${categoryGridHtml([])}</div>
+    <label class="field">Goal, for now</label>
+    ${goalTypeSelectHtml("onboardGoalType","abstinence")}
+    <p class="lead" style="margin-top:6px;">You can set a different goal per track later, and change this any time.</p>
+    <button class="btn block" id="onboardConfirm" style="margin-top:16px;">Get started</button>
+  `;
+  document.getElementById("onboardCatGrid").addEventListener("click",(e)=>{
+    const b = e.target.closest(".cat-opt"); if(!b) return;
+    const key = b.dataset.cat;
+    if(selected.has(key)){ selected.delete(key); b.classList.remove("selected"); }
+    else{ selected.add(key); b.classList.add("selected"); }
+  });
+  document.getElementById("onboardConfirm").addEventListener("click", ()=>{
+    if(selected.size===0){ showToast("Pick at least one to get started."); return; }
+    const goalType = document.getElementById("onboardGoalType").value;
+    let firstId = null;
+    selected.forEach(key=>{
+      const t = defaultTracker(key, null, goalType);
+      DATA.trackers.push(t);
+      if(!firstId) firstId = t.id;
+    });
+    DATA.activeTrackerId = firstId;
+    save();
+    document.getElementById("onboardBackdrop").classList.remove("open");
+    renderAll();
+  });
+}
+
+/* ---------- add / manage tracks (from Settings, or the "+" chip) ---------- */
+function openAddTrackerFlow(){
+  let selectedCat = null;
+  document.getElementById("urgeModalBody").innerHTML = `
+    <p class="lead">What are you adding?</p>
+    <div id="addTrackCatGrid">${categoryGridHtml([])}</div>
+    <label class="field">Label</label>
+    <input type="text" id="addTrackLabel" placeholder="Display name">
+    <label class="field">Goal</label>
+    ${goalTypeSelectHtml("addTrackGoalType","abstinence")}
+    <button class="btn block" id="addTrackConfirm" style="margin-top:14px;">Add track</button>
+  `;
+  document.querySelector("#urgeModalBackdrop h3").textContent = "New track";
+  openModal();
+  document.getElementById("addTrackCatGrid").addEventListener("click",(e)=>{
+    const b = e.target.closest(".cat-opt"); if(!b) return;
+    document.querySelectorAll("#addTrackCatGrid .cat-opt").forEach(x=>x.classList.remove("selected"));
+    b.classList.add("selected");
+    selectedCat = b.dataset.cat;
+    const labelInput = document.getElementById("addTrackLabel");
+    if(!labelInput.value) labelInput.value = categoryMeta(selectedCat).label;
+  });
+  document.getElementById("addTrackConfirm").addEventListener("click", ()=>{
+    if(!selectedCat){ showToast("Pick a category first."); return; }
+    const label = document.getElementById("addTrackLabel").value.trim() || categoryMeta(selectedCat).label;
+    const goalType = document.getElementById("addTrackGoalType").value;
+    const t = defaultTracker(selectedCat, label, goalType);
+    DATA.trackers.push(t);
+    DATA.activeTrackerId = t.id;
+    save(); closeModal(); renderAll();
+    showToast("Track added.");
+  });
+}
+document.getElementById("addTrackBtn").addEventListener("click", openAddTrackerFlow);
+
+function renderTracksSettings(){
+  const el = document.getElementById("tracksSettingsList");
+  if(!el) return;
+  if(DATA.trackers.length===0){ el.innerHTML = '<div class="empty"><div class="wave">〰</div>No tracks yet.</div>'; return; }
+  el.innerHTML = DATA.trackers.map(t=>{
+    const goalLabels = {abstinence:"Quit completely", moderation:"Cut down to a limit", harm_reduction:"Stay safer while using"};
+    return `<div class="track-item">
+      <div class="txt">
+        <b>${escapeHtml(t.label)}</b>
+        <div class="meta">${escapeHtml(categoryMeta(t.category).label)} · ${goalLabels[t.goalType]||t.goalType}</div>
+      </div>
+      <div class="row" style="gap:6px;">
+        <button class="btn secondary trackEditBtn" data-id="${t.id}" style="padding:7px 12px; font-size:0.76rem;">Edit</button>
+        <button class="icon-x trackDelBtn" data-id="${t.id}" aria-label="Remove track">&times;</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+document.getElementById("tracksSettingsList").addEventListener("click",(e)=>{
+  const editBtn = e.target.closest(".trackEditBtn");
+  const delBtn = e.target.closest(".trackDelBtn");
+  if(editBtn){ openEditTrackerFlow(editBtn.dataset.id); return; }
+  if(delBtn){ confirmRemoveTracker(delBtn.dataset.id); return; }
+});
+function openEditTrackerFlow(id){
+  const t = DATA.trackers.find(x=>x.id===id); if(!t) return;
+  document.querySelector("#urgeModalBackdrop h3").textContent = "Edit track";
+  document.getElementById("urgeModalBody").innerHTML = `
+    <label class="field">Label</label>
+    <input type="text" id="editTrackLabel" value="${escapeAttr(t.label)}">
+    <label class="field">Goal</label>
+    ${goalTypeSelectHtml("editTrackGoalType", t.goalType)}
+    <button class="btn block" id="editTrackConfirm" style="margin-top:14px;">Save</button>
+  `;
+  openModal();
+  document.getElementById("editTrackConfirm").addEventListener("click", ()=>{
+    t.label = document.getElementById("editTrackLabel").value.trim() || t.label;
+    t.goalType = document.getElementById("editTrackGoalType").value;
+    save(); closeModal(); renderAll();
+    showToast("Track updated.");
+  });
+}
+function confirmRemoveTracker(id){
+  const t = DATA.trackers.find(x=>x.id===id); if(!t) return;
+  document.querySelector("#urgeModalBackdrop h3").textContent = "Remove track";
+  document.getElementById("urgeModalBody").innerHTML = `
+    <p class="lead">This removes "${escapeHtml(t.label)}" and everything logged under it on this device. This can't be undone unless you exported a backup first.</p>
+    <button class="btn warn block" id="confirmTrackRemove" style="margin-bottom:10px;">Yes, remove it</button>
+    <button class="btn secondary block" id="cancelTrackRemove">Cancel</button>
+  `;
+  openModal();
+  document.getElementById("confirmTrackRemove").addEventListener("click", ()=>{
+    DATA.trackers = DATA.trackers.filter(x=>x.id!==id);
+    if(DATA.activeTrackerId===id) DATA.activeTrackerId = DATA.trackers.length ? DATA.trackers[0].id : null;
+    save(); closeModal(); renderAll();
+    showToast("Track removed.");
+  });
+  document.getElementById("cancelTrackRemove").addEventListener("click", closeModal);
+}
+
+/* ---------- tracker switcher (Home) ---------- */
+function renderTrackerSwitcher(){
+  const el = document.getElementById("trackerSwitcher");
+  if(!el) return;
+  const chips = DATA.trackers.map(t=>
+    `<button class="tracker-chip ${t.id===DATA.activeTrackerId?'active':''}" data-id="${t.id}">${escapeHtml(t.label)}</button>`
+  ).join("");
+  el.innerHTML = chips + `<button class="tracker-chip add-chip" id="switcherAddChip">+ Add</button>`;
+  el.querySelectorAll(".tracker-chip[data-id]").forEach(chip=>{
+    chip.addEventListener("click", ()=>{
+      DATA.activeTrackerId = chip.dataset.id;
+      save(); renderAll();
+    });
+  });
+  const addChip = document.getElementById("switcherAddChip");
+  if(addChip) addChip.addEventListener("click", openAddTrackerFlow);
+}
+
+/* ---------- ambient sound player ---------- */
+const AMBIENT_TRACKS = [
+  {id:"waves", name:"Waves", file:"audio/waves.mp3"}
+];
+function ambientTrackFile(id){ const t = AMBIENT_TRACKS.find(x=>x.id===id); return t ? t.file : AMBIENT_TRACKS[0].file; }
+function initAmbient(){
+  const audio = document.getElementById("ambientAudio");
+  const vol = document.getElementById("ambientVolume");
+  audio.src = ambientTrackFile(DATA.ambient.track);
+  audio.volume = DATA.ambient.volume;
+  vol.value = DATA.ambient.volume;
+  updateAmbientIcon(false); // never autoplay — always starts paused, even if it was on before reload
+  document.getElementById("ambientToggleBtn").addEventListener("click", ()=>{
+    if(audio.paused){
+      audio.play().catch(()=>{ showToast("Couldn't start audio — add audio/waves.mp3 next to index.html."); });
+      updateAmbientIcon(true);
+      DATA.ambient.on = true;
+    } else {
+      audio.pause();
+      updateAmbientIcon(false);
+      DATA.ambient.on = false;
+    }
+    save();
+    document.getElementById("ambientPill").classList.add("expanded");
+  });
+  vol.addEventListener("input", ()=>{
+    audio.volume = Number(vol.value);
+    DATA.ambient.volume = Number(vol.value);
+    save();
+    const settingsSlider = document.getElementById("settingAmbientVolume");
+    if(settingsSlider){ settingsSlider.value = vol.value; document.getElementById("settingAmbientVolumeVal").textContent = Math.round(vol.value*100)+"%"; }
+  });
+}
+function updateAmbientIcon(playing){
+  const btn = document.getElementById("ambientToggleBtn");
+  const icon = document.getElementById("ambientIcon");
+  btn.classList.toggle("playing", playing);
+  icon.innerHTML = playing
+    ? '<rect x="6" y="5" width="4" height="14"></rect><rect x="14" y="5" width="4" height="14"></rect>'
+    : '<path d="M8 5v14l11-7z"></path>';
+  btn.setAttribute("aria-label", playing ? "Pause ambient sound" : "Play ambient sound");
+}
+
+/* ---------- crisis / resources hub ---------- */
+function renderCrisisModal(){
+  const em = DATA.emergency;
+  const localBtn = em.localNumber ? `<button class="btn warn block" id="crisisCallLocal" style="margin-bottom:10px;">Call ${escapeHtml(em.localNumber)}</button>` : "";
+  const helplineHref = /^https?:\/\//.test(em.localHelplineLink||"") ? em.localHelplineLink : ("tel:"+String(em.localHelplineLink||"").replace(/[^\d+]/g,""));
+  const helplineBtn = (em.localHelplineName && em.localHelplineLink) ? `<a class="btn secondary block" href="${escapeAttr(helplineHref)}" target="_blank" rel="noopener" style="display:block; text-align:center; text-decoration:none; margin-bottom:10px;">${escapeHtml(em.localHelplineName)}</a>` : "";
+  document.getElementById("crisisModalBody").innerHTML = `
+    <p class="note-callout" style="margin-bottom:14px;">In a medical emergency, call your local emergency number.</p>
+    ${localBtn}${helplineBtn}
+    ${(!em.localNumber && !em.localHelplineName) ? '<p class="lead">Save your own local emergency number and helpline in Settings so they show up here as one-tap buttons.</p>' : ""}
+    <div class="res-item">
+      <div class="res-icon">☎</div>
+      <div class="txt" style="flex:1;"><b><a href="https://findahelpline.com" target="_blank" rel="noopener">Find A Helpline</a></b><div class="meta">Verified directory covering 175+ countries — chat, text, or phone.</div></div>
+    </div>
+    <div class="res-item">
+      <div class="res-icon">☎</div>
+      <div class="txt" style="flex:1;"><b><a href="https://befrienders.org" target="_blank" rel="noopener">Befrienders Worldwide</a></b><div class="meta">International emotional-support and suicide-prevention network.</div></div>
+    </div>
+    <div class="res-item">
+      <div class="res-icon">👥</div>
+      <div class="txt" style="flex:1;"><b><a href="https://www.aa.org" target="_blank" rel="noopener">Alcoholics Anonymous</a></b><div class="meta">Worldwide fellowship and meeting finder.</div></div>
+    </div>
+    <div class="res-item">
+      <div class="res-icon">👥</div>
+      <div class="txt" style="flex:1;"><b><a href="https://www.na.org" target="_blank" rel="noopener">Narcotics Anonymous</a></b><div class="meta">Worldwide fellowship and meeting finder.</div></div>
+    </div>
+    <div class="res-item">
+      <div class="res-icon">👥</div>
+      <div class="txt" style="flex:1;"><b><a href="https://www.smartrecovery.org" target="_blank" rel="noopener">SMART Recovery International</a></b><div class="meta">Free, secular, CBT-based — any addictive behavior, online worldwide.</div></div>
+    </div>
+    <p class="lead" style="margin-top:12px;">This app doesn't diagnose anything. If a self-assessment or check-in ever concerns you, that's worth bringing to a doctor or counselor — not something to figure out alone.</p>
+  `;
+  const callBtn = document.getElementById("crisisCallLocal");
+  if(callBtn) callBtn.addEventListener("click", ()=>{ window.location.href = "tel:"+em.localNumber.replace(/[^\d+]/g,""); });
+}
+document.getElementById("crisisBtn").addEventListener("click", ()=>{
+  renderCrisisModal();
+  document.getElementById("crisisModalBackdrop").classList.add("open");
+});
+document.getElementById("crisisModalClose").addEventListener("click", ()=> document.getElementById("crisisModalBackdrop").classList.remove("open"));
+document.getElementById("crisisModalBackdrop").addEventListener("click",(e)=>{ if(e.target.id==="crisisModalBackdrop") document.getElementById("crisisModalBackdrop").classList.remove("open"); });
+
+/* ---------- emergency settings ---------- */
+document.getElementById("emergencySaveBtn").addEventListener("click", ()=>{
+  DATA.emergency.localNumber = document.getElementById("emergencyNumber").value.trim();
+  DATA.emergency.localHelplineName = document.getElementById("emergencyHelplineName").value.trim();
+  DATA.emergency.localHelplineLink = document.getElementById("emergencyHelplineLink").value.trim();
+  save();
+  showToast("Saved.");
+});
+document.getElementById("settingAmbientVolume").addEventListener("input",(e)=>{
+  DATA.ambient.volume = Number(e.target.value);
+  document.getElementById("settingAmbientVolumeVal").textContent = Math.round(e.target.value*100)+"%";
+  const audio = document.getElementById("ambientAudio");
+  if(audio){ audio.volume = DATA.ambient.volume; }
+  const pillVol = document.getElementById("ambientVolume");
+  if(pillVol) pillVol.value = e.target.value;
+  save();
+});
 
 /* ---------- toast ---------- */
 let toastTimer=null;
@@ -1075,8 +1584,8 @@ function currentRank(){
 }
 
 function lastRelapseDate(){
-  if(DATA.relapses.length===0) return null;
-  const sorted=[...DATA.relapses].sort((a,b)=> a.date.localeCompare(b.date));
+  if(AT().relapseLog.length===0) return null;
+  const sorted=[...AT().relapseLog].sort((a,b)=> a.date.localeCompare(b.date));
   return sorted[sorted.length-1].date;
 }
 function streakStartDate(){
@@ -1086,7 +1595,7 @@ function streakStartDate(){
     d.setDate(d.getDate()+1);
     return d;
   }
-  return parseDate(DATA.firstUse);
+  return parseDate(AT().startDate);
 }
 function currentStreakDays(){
   const start = streakStartDate();
@@ -1094,9 +1603,9 @@ function currentStreakDays(){
   return Math.max(0, daysBetween(now, start));
 }
 function longestStreakDays(){
-  const relapseDates = [...DATA.relapses].map(r=>r.date).sort();
+  const relapseDates = [...AT().relapseLog].map(r=>r.date).sort();
   let longest = 0;
-  let cursor = parseDate(DATA.firstUse);
+  let cursor = parseDate(AT().startDate);
   for(const rd of relapseDates){
     const rdDate = parseDate(rd);
     const span = daysBetween(rdDate, cursor);
@@ -1108,10 +1617,10 @@ function longestStreakDays(){
   return Math.max(longest, currentStreakDays());
 }
 function totalCleanDays(){
-  return Object.values(DATA.checkins).filter(c=>c.clean).length;
+  return Object.values(AT().checkins).filter(c=>c.clean).length;
 }
 function totalTrackedDays(){
-  return Object.keys(DATA.checkins).length;
+  return Object.keys(AT().checkins).length;
 }
 function successRate(){
   const total = totalTrackedDays();
@@ -1224,16 +1733,17 @@ function renderFlame(){
 function checkMilestoneCelebration(){
   const cur = currentStreakDays();
   const unlocked = MILESTONES.filter(m=>cur>=m.days).map(m=>m.days);
-  const seen = DATA.__seenMilestones || [];
+  const t = AT(); if(!t) return;
+  const seen = t.seenMilestones || [];
   const fresh = unlocked.filter(d=>!seen.includes(d));
   if(fresh.length>0){
     const top = Math.max(...fresh);
     const m = MILESTONES.find(x=>x.days===top);
-    DATA.__seenMilestones = unlocked;
+    t.seenMilestones = unlocked;
     save();
     showToast(`🔥 Milestone reached — ${m.label}`);
   } else if(seen.length!==unlocked.length){
-    DATA.__seenMilestones = unlocked;
+    t.seenMilestones = unlocked;
     save();
   }
 }
@@ -1354,7 +1864,7 @@ function renderHome(){
   renderTrend();
   renderWeeklyReview();
   const today = todayStr();
-  const already = DATA.checkins[today];
+  const already = AT().checkins[today];
   document.getElementById("checkinLead").textContent = already
     ? (already.clean ? "You've already checked in today. Nicely done." : "You logged today already.")
     : "Mark how today went.";
@@ -1400,8 +1910,8 @@ function renderHeatmap(weeks){
     let cls="hcell";
     if(d>now){ cls+=""; }
     else{
-      const c = DATA.checkins[ds];
-      const isRelapse = DATA.relapses.some(r=>r.date===ds);
+      const c = AT().checkins[ds];
+      const isRelapse = AT().relapseLog.some(r=>r.date===ds);
       if(isRelapse) cls+=" relapse";
       else if(c && c.clean) cls+=" clean3";
     }
@@ -1423,7 +1933,7 @@ function renderTrend(){
     for(let i=0;i<7;i++){
       const d=new Date(start); d.setDate(d.getDate()+i);
       const ds=d.toISOString().slice(0,10);
-      if(DATA.checkins[ds] && DATA.checkins[ds].clean) count++;
+      if(AT().checkins[ds] && AT().checkins[ds].clean) count++;
     }
     buckets.push(count);
   }
@@ -1454,8 +1964,8 @@ function renderWeeklyReview(){
   for(let i=0;i<7;i++){
     const d=new Date(start); d.setDate(d.getDate()+i);
     const ds=d.toISOString().slice(0,10);
-    if(DATA.checkins[ds]){ tracked++; if(DATA.checkins[ds].clean) clean++; }
-    const j = DATA.journal[ds];
+    if(AT().checkins[ds]){ tracked++; if(AT().checkins[ds].clean) clean++; }
+    const j = AT().journalEntries[ds];
     if(j && j.trigger && j.trigger.trim()){
       const key=j.trigger.trim().toLowerCase();
       triggerCounts[key]=(triggerCounts[key]||0)+1;
@@ -1475,7 +1985,7 @@ document.getElementById("btnCheckClean").addEventListener("click", ()=>{
   openCheckinModal();
 });
 function openCheckinModal(){
-  const urgeRow = DATA.settings.urgePrompt ? `
+  const urgeRow = AT().settings.urgePrompt ? `
     <label class="field">Urge intensity today (optional)</label>
     <div class="slider-row"><input type="range" min="0" max="10" value="0" id="checkinUrge"><span class="slider-val mono" id="checkinUrgeVal">0</span></div>
   ` : "";
@@ -1485,14 +1995,14 @@ function openCheckinModal(){
     <button class="btn block" id="checkinConfirm" style="margin-top:14px;">Confirm check-in</button>
   `;
   openModal();
-  if(DATA.settings.urgePrompt){
+  if(AT().settings.urgePrompt){
     const r=document.getElementById("checkinUrge");
     r.addEventListener("input", ()=> document.getElementById("checkinUrgeVal").textContent=r.value);
   }
   document.getElementById("checkinConfirm").addEventListener("click", ()=>{
     const today=todayStr();
-    const urge = DATA.settings.urgePrompt ? Number(document.getElementById("checkinUrge").value) : null;
-    DATA.checkins[today] = {clean:true, urgeIntensity:urge};
+    const urge = AT().settings.urgePrompt ? Number(document.getElementById("checkinUrge").value) : null;
+    AT().checkins[today] = {clean:true, urgeIntensity:urge};
     save(); closeModal(); renderAll();
     showToast("Checked in — nice work.");
   });
@@ -1564,7 +2074,7 @@ function askOutcome(intensity, toolLabel){
 }
 function logUrgeEntry(intensity, tool, outcome){
   const now=new Date();
-  DATA.urgeEntries.push({date:todayStr(), time:now.toTimeString().slice(0,5), intensity, tool, outcome});
+  AT().urgeEntries.push({date:todayStr(), time:now.toTimeString().slice(0,5), intensity, tool, outcome});
   save();
 }
 
@@ -1645,7 +2155,10 @@ document.getElementById("libraryVideoGrid")?.addEventListener("keydown", (e)=>{
 
 /* ---------- modal ---------- */
 function openModal(){ document.getElementById("urgeModalBackdrop").classList.add("open"); }
-function closeModal(){ document.getElementById("urgeModalBackdrop").classList.remove("open"); }
+function closeModal(){
+  document.getElementById("urgeModalBackdrop").classList.remove("open");
+  document.querySelector("#urgeModalBackdrop h3").textContent = "Right now";
+}
 document.getElementById("urgeModalClose").addEventListener("click", closeModal);
 document.getElementById("urgeModalBackdrop").addEventListener("click", (e)=>{ if(e.target.id==="urgeModalBackdrop") closeModal(); });
 
@@ -1784,16 +2297,16 @@ document.getElementById("groundNext").addEventListener("click", ()=>{
 
 /* ---------- physical reset checklist (daily reset) ---------- */
 function ensurePhysicalResetToday(){
-  if(DATA.physicalResetDate !== todayStr()){
-    DATA.physicalChecklist.forEach(i=> i.done=false);
-    DATA.physicalResetDate = todayStr();
+  if(AT().physicalResetDate !== todayStr()){
+    AT().physicalChecklist.forEach(i=> i.done=false);
+    AT().physicalResetDate = todayStr();
     save();
   }
 }
 function renderPhysicalList(){
   const el = document.getElementById("physicalList");
-  if(DATA.physicalChecklist.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No items yet — add one below.</div>'; return; }
-  el.innerHTML = DATA.physicalChecklist.map(i=>`
+  if(AT().physicalChecklist.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No items yet — add one below.</div>'; return; }
+  el.innerHTML = AT().physicalChecklist.map(i=>`
     <div class="checkline ${i.done?'done':''}">
       <input type="checkbox" data-id="${i.id}" class="physCheck" ${i.done?"checked":""}>
       <span class="txt">${escapeHtml(i.text)}</span>
@@ -1802,19 +2315,19 @@ function renderPhysicalList(){
 }
 document.getElementById("physicalList").addEventListener("change",(e)=>{
   if(!e.target.classList.contains("physCheck")) return;
-  const item = DATA.physicalChecklist.find(i=>i.id===e.target.dataset.id);
+  const item = AT().physicalChecklist.find(i=>i.id===e.target.dataset.id);
   if(item){ item.done = e.target.checked; save(); renderPhysicalList(); }
 });
 document.getElementById("physicalList").addEventListener("click",(e)=>{
   if(!e.target.classList.contains("physDel")) return;
-  DATA.physicalChecklist = DATA.physicalChecklist.filter(i=>i.id!==e.target.dataset.id);
+  AT().physicalChecklist = AT().physicalChecklist.filter(i=>i.id!==e.target.dataset.id);
   save(); renderPhysicalList();
 });
 document.getElementById("physicalAddBtn").addEventListener("click", ()=>{
   const input = document.getElementById("physicalNewItem");
   const val = input.value.trim();
   if(!val) return;
-  DATA.physicalChecklist.push({id:uid(), text:val, done:false});
+  AT().physicalChecklist.push({id:uid(), text:val, done:false});
   input.value="";
   save(); renderPhysicalList();
 });
@@ -1841,25 +2354,25 @@ document.getElementById("haltList").addEventListener("change", ()=>{
 /* ---------- distraction toolkit ---------- */
 function renderDistractList(){
   const el = document.getElementById("distractList");
-  if(DATA.distractions.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No activities yet.</div>'; return; }
-  el.innerHTML = DATA.distractions.map((d,i)=>`
+  if(AT().distractions.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No activities yet.</div>'; return; }
+  el.innerHTML = AT().distractions.map((d,i)=>`
     <div class="list-item"><div class="txt">${escapeHtml(d)}</div><button class="icon-x distDel" data-i="${i}">&times;</button></div>
   `).join("");
 }
 document.getElementById("distractList").addEventListener("click",(e)=>{
   if(!e.target.classList.contains("distDel")) return;
-  DATA.distractions.splice(Number(e.target.dataset.i),1);
+  AT().distractions.splice(Number(e.target.dataset.i),1);
   save(); renderDistractList();
 });
 document.getElementById("distractAddBtn").addEventListener("click", ()=>{
   const input = document.getElementById("distractNewItem");
   const val = input.value.trim(); if(!val) return;
-  DATA.distractions.push(val); input.value="";
+  AT().distractions.push(val); input.value="";
   save(); renderDistractList();
 });
 document.getElementById("distractRandom").addEventListener("click", ()=>{
-  if(DATA.distractions.length===0){ showToast("Add a few activities first."); return; }
-  const pick = DATA.distractions[Math.floor(Math.random()*DATA.distractions.length)];
+  if(AT().distractions.length===0){ showToast("Add a few activities first."); return; }
+  const pick = AT().distractions[Math.floor(Math.random()*AT().distractions.length)];
   const box = document.getElementById("distractPick");
   box.style.display="block"; box.textContent = pick;
 });
@@ -1867,19 +2380,19 @@ document.getElementById("distractRandom").addEventListener("click", ()=>{
 /* ---------- journal ---------- */
 function renderJournalEntry(){
   document.getElementById("journalDateLabel").textContent = fmtDate(todayStr());
-  const existing = DATA.journal[todayStr()] || {};
+  const existing = AT().journalEntries[todayStr()] || {};
   document.getElementById("jMood").value = existing.mood || "";
   document.getElementById("jEnergy").value = existing.energy || "";
   document.getElementById("jUrge").value = existing.urge || 0;
   document.getElementById("jUrgeVal").textContent = existing.urge || 0;
   document.getElementById("jTrigger").value = existing.trigger || "";
   document.getElementById("jHelped").value = existing.helped || "";
-  document.getElementById("jUrgeRow").style.display = DATA.settings.urgePrompt ? "flex":"none";
-  document.getElementById("jUrgeLabel").style.display = DATA.settings.urgePrompt ? "block":"none";
+  document.getElementById("jUrgeRow").style.display = AT().settings.urgePrompt ? "flex":"none";
+  document.getElementById("jUrgeLabel").style.display = AT().settings.urgePrompt ? "block":"none";
 }
 document.getElementById("jUrge").addEventListener("input", (e)=> document.getElementById("jUrgeVal").textContent=e.target.value);
 document.getElementById("jSave").addEventListener("click", ()=>{
-  DATA.journal[todayStr()] = {
+  AT().journalEntries[todayStr()] = {
     mood: document.getElementById("jMood").value,
     energy: document.getElementById("jEnergy").value,
     urge: Number(document.getElementById("jUrge").value),
@@ -1890,7 +2403,7 @@ document.getElementById("jSave").addEventListener("click", ()=>{
 });
 function renderJournalHistory(){
   const el = document.getElementById("journalHistoryList");
-  const entries = Object.entries(DATA.journal).sort((a,b)=> b[0].localeCompare(a[0]));
+  const entries = Object.entries(AT().journalEntries).sort((a,b)=> b[0].localeCompare(a[0]));
   if(entries.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No entries yet.</div>'; return; }
   el.innerHTML = entries.map(([date,j])=>`
     <div class="list-item">
@@ -1909,15 +2422,15 @@ document.getElementById("trigAddBtn").addEventListener("click", ()=>{
   const textEl = document.getElementById("trigNewText");
   const text = textEl.value.trim(); if(!text) return;
   const cat = document.getElementById("trigNewCat").value;
-  DATA.triggers.push({id:uid(), text, cat});
+  AT().triggers.push({id:uid(), text, cat});
   textEl.value="";
   save(); renderTriggers(); renderTriggerSelects();
 });
 function renderTriggers(){
   const el = document.getElementById("triggerCategoryLists");
-  if(DATA.triggers.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No triggers logged yet.</div>'; return; }
+  if(AT().triggers.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No triggers logged yet.</div>'; return; }
   el.innerHTML = TRIGGER_CATS.map(cat=>{
-    const items = DATA.triggers.filter(t=>t.cat===cat);
+    const items = AT().triggers.filter(t=>t.cat===cat);
     if(items.length===0) return "";
     return `<h3 style="font-size:0.85rem; color:var(--text-faint); margin:14px 0 4px;">${cat}</h3>` +
       items.map(t=>`<div class="list-item"><div class="txt">${escapeHtml(t.text)}</div><button class="icon-x trigDel" data-id="${t.id}">&times;</button></div>`).join("");
@@ -1925,14 +2438,14 @@ function renderTriggers(){
 }
 document.getElementById("triggerCategoryLists").addEventListener("click",(e)=>{
   if(!e.target.classList.contains("trigDel")) return;
-  DATA.triggers = DATA.triggers.filter(t=>t.id!==e.target.dataset.id);
-  DATA.plans.forEach(p=>{ if(p.triggerId===e.target.dataset.id) p.triggerId=null; });
+  AT().triggers = AT().triggers.filter(t=>t.id!==e.target.dataset.id);
+  AT().plans.forEach(p=>{ if(p.triggerId===e.target.dataset.id) p.triggerId=null; });
   save(); renderTriggers(); renderTriggerSelects(); renderPlans();
 });
 function renderTriggerSelects(){
-  const opts = `<option value="">— none —</option>` + DATA.triggers.map(t=>`<option value="${t.id}">${escapeHtml(t.text)} (${t.cat})</option>`).join("");
+  const opts = `<option value="">— none —</option>` + AT().triggers.map(t=>`<option value="${t.id}">${escapeHtml(t.text)} (${t.cat})</option>`).join("");
   document.getElementById("planTrigger").innerHTML = opts;
-  document.getElementById("relTrigger").innerHTML = `<option value="">— select or leave blank —</option>` + DATA.triggers.map(t=>`<option value="${t.id}">${escapeHtml(t.text)} (${t.cat})</option>`).join("");
+  document.getElementById("relTrigger").innerHTML = `<option value="">— select or leave blank —</option>` + AT().triggers.map(t=>`<option value="${t.id}">${escapeHtml(t.text)} (${t.cat})</option>`).join("");
 }
 
 /* ---------- if/then plans ---------- */
@@ -1941,15 +2454,15 @@ document.getElementById("planAddBtn").addEventListener("click", ()=>{
   const ifText=ifEl.value.trim(), thenText=thenEl.value.trim();
   if(!ifText || !thenText){ showToast("Add both an if and a then."); return; }
   const triggerId = document.getElementById("planTrigger").value || null;
-  DATA.plans.push({id:uid(), ifText, thenText, triggerId});
+  AT().plans.push({id:uid(), ifText, thenText, triggerId});
   ifEl.value=""; thenEl.value=""; document.getElementById("planTrigger").value="";
   save(); renderPlans();
 });
 function renderPlans(){
   const el = document.getElementById("planList");
-  if(DATA.plans.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No plans yet.</div>'; return; }
-  el.innerHTML = DATA.plans.map(p=>{
-    const trig = DATA.triggers.find(t=>t.id===p.triggerId);
+  if(AT().plans.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No plans yet.</div>'; return; }
+  el.innerHTML = AT().plans.map(p=>{
+    const trig = AT().triggers.find(t=>t.id===p.triggerId);
     return `<div class="list-item">
       <div class="txt"><b>If</b> ${escapeHtml(p.ifText)}<br><b>Then</b> ${escapeHtml(p.thenText)}
       ${trig?`<div class="meta">Tagged: ${escapeHtml(trig.text)}</div>`:""}</div>
@@ -1959,7 +2472,7 @@ function renderPlans(){
 }
 document.getElementById("planList").addEventListener("click",(e)=>{
   if(!e.target.classList.contains("planDel")) return;
-  DATA.plans = DATA.plans.filter(p=>p.id!==e.target.dataset.id);
+  AT().plans = AT().plans.filter(p=>p.id!==e.target.dataset.id);
   save(); renderPlans();
 });
 
@@ -1979,7 +2492,7 @@ document.getElementById("relSaveBtn").addEventListener("click", ()=>{
     note: document.getElementById("relNote").value,
     loggedAt: new Date().toISOString()
   };
-  DATA.relapses.push(entry);
+  AT().relapseLog.push(entry);
   ["relTime","relMood","relSleep","relNote"].forEach(id=>document.getElementById(id).value="");
   document.getElementById("relDate").value="";
   document.getElementById("relTrigger").value="";
@@ -1991,10 +2504,10 @@ document.getElementById("relSaveBtn").addEventListener("click", ()=>{
 });
 function renderRelapseList(){
   const el = document.getElementById("relapseList");
-  if(DATA.relapses.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>Nothing logged — that is a good thing.</div>'; return; }
-  const sorted = [...DATA.relapses].sort((a,b)=> b.date.localeCompare(a.date));
+  if(AT().relapseLog.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>Nothing logged — that is a good thing.</div>'; return; }
+  const sorted = [...AT().relapseLog].sort((a,b)=> b.date.localeCompare(a.date));
   el.innerHTML = sorted.map(r=>{
-    const trig = DATA.triggers.find(t=>t.id===r.triggerId);
+    const trig = AT().triggers.find(t=>t.id===r.triggerId);
     return `<div class="list-item">
       <div class="txt"><b>${fmtDate(r.date)}</b> ${r.time?("· "+escapeHtml(r.time)):""}
         <div class="meta">${trig?("Trigger: "+escapeHtml(trig.text)):""}${r.mood?(" · Mood: "+escapeHtml(r.mood)):""}${r.intensity!==undefined?(" · Intensity "+r.intensity+"/10"):""}</div>
@@ -2006,31 +2519,31 @@ function renderRelapseList(){
 }
 document.getElementById("relapseList").addEventListener("click",(e)=>{
   if(!e.target.classList.contains("relDel")) return;
-  DATA.relapses = DATA.relapses.filter(r=>r.id!==e.target.dataset.id);
+  AT().relapseLog = AT().relapseLog.filter(r=>r.id!==e.target.dataset.id);
   save(); renderAll();
 });
 
 /* ---------- patterns ---------- */
 function renderPatterns(){
   const el = document.getElementById("patternResults");
-  if(DATA.relapses.length<2){ el.innerHTML='<div class="empty"><div class="wave">〰</div>Log a few entries to see patterns emerge.</div>'; return; }
+  if(AT().relapseLog.length<2){ el.innerHTML='<div class="empty"><div class="wave">〰</div>Log a few entries to see patterns emerge.</div>'; return; }
   const bandCounts={};
-  DATA.relapses.forEach(r=>{
+  AT().relapseLog.forEach(r=>{
     const band = timeBand(r.time);
     if(band) bandCounts[band]=(bandCounts[band]||0)+1;
   });
   const triggerCounts={};
-  DATA.relapses.forEach(r=>{
-    const trig = DATA.triggers.find(t=>t.id===r.triggerId);
+  AT().relapseLog.forEach(r=>{
+    const trig = AT().triggers.find(t=>t.id===r.triggerId);
     const key = trig ? trig.text : null;
     if(key) triggerCounts[key]=(triggerCounts[key]||0)+1;
   });
   let lines=[];
   const topBand = Object.entries(bandCounts).sort((a,b)=>b[1]-a[1])[0];
-  if(topBand) lines.push(`Most slips logged between ${topBand[0]} (${topBand[1]} of ${DATA.relapses.length}).`);
+  if(topBand) lines.push(`Most slips logged between ${topBand[0]} (${topBand[1]} of ${AT().relapseLog.length}).`);
   const topTrig = Object.entries(triggerCounts).sort((a,b)=>b[1]-a[1])[0];
   if(topTrig) lines.push(`Most common trigger: ${topTrig[0]} (${topTrig[1]} time${topTrig[1]===1?"":"s"}).`);
-  lines.push(`${DATA.relapses.length} entries logged in total.`);
+  lines.push(`${AT().relapseLog.length} entries logged in total.`);
   el.innerHTML = lines.map(l=>`<div class="pattern-line">${escapeHtml(l)}</div>`).join("");
 }
 function timeBand(timeStr){
@@ -2053,7 +2566,7 @@ function timeBand(timeStr){
 /* ---------- guides: env audit ---------- */
 function renderAuditList(){
   const el = document.getElementById("auditList");
-  el.innerHTML = DATA.envAudit.map(i=>`
+  el.innerHTML = AT().envAudit.map(i=>`
     <div class="checkline ${i.done?'done':''}">
       <input type="checkbox" class="auditCheck" data-id="${i.id}" ${i.done?"checked":""}>
       <span class="txt">${escapeHtml(i.text)}</span>
@@ -2061,7 +2574,7 @@ function renderAuditList(){
 }
 document.getElementById("auditList").addEventListener("change",(e)=>{
   if(!e.target.classList.contains("auditCheck")) return;
-  const item = DATA.envAudit.find(i=>i.id===e.target.dataset.id);
+  const item = AT().envAudit.find(i=>i.id===e.target.dataset.id);
   if(item){ item.done=e.target.checked; save(); }
 });
 
@@ -2072,32 +2585,32 @@ document.getElementById("partnerCopyBtn").addEventListener("click", async ()=>{
   catch(e){ showToast("Couldn't copy — select and copy manually."); }
 });
 document.getElementById("partnerTemplate").addEventListener("change",(e)=>{
-  DATA.partnerTemplate = e.target.value; save();
+  AT().partnerTemplate = e.target.value; save();
 });
 
 /* ---------- learn: why ---------- */
 document.getElementById("whySaveBtn").addEventListener("click", ()=>{
-  DATA.why = document.getElementById("whyText").value;
+  AT().why = document.getElementById("whyText").value;
   save(); showToast("Saved.");
 });
 
 /* ---------- benefits timeline ---------- */
 function renderBenefits(){
   const el = document.getElementById("benefitsList");
-  if(DATA.benefits.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No entries yet.</div>'; return; }
-  el.innerHTML = DATA.benefits.map(b=>`
+  if(AT().benefits.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>No entries yet.</div>'; return; }
+  el.innerHTML = AT().benefits.map(b=>`
     <div class="list-item"><div class="txt">${escapeHtml(b.text)}</div><button class="icon-x benefitDel" data-id="${b.id}">&times;</button></div>
   `).join("");
 }
 document.getElementById("benefitAddBtn").addEventListener("click", ()=>{
   const input = document.getElementById("benefitNewText");
   const val = input.value.trim(); if(!val) return;
-  DATA.benefits.push({id:uid(), text:val});
+  AT().benefits.push({id:uid(), text:val});
   input.value=""; save(); renderBenefits();
 });
 document.getElementById("benefitsList").addEventListener("click",(e)=>{
   if(!e.target.classList.contains("benefitDel")) return;
-  DATA.benefits = DATA.benefits.filter(b=>b.id!==e.target.dataset.id);
+  AT().benefits = AT().benefits.filter(b=>b.id!==e.target.dataset.id);
   save(); renderBenefits();
 });
 
@@ -2105,8 +2618,8 @@ document.getElementById("benefitsList").addEventListener("click",(e)=>{
 const RES_ICONS = {book:"📖", video:"▶", community:"👥", hotline:"☎", link:"🔗"};
 function renderResources(){
   const el = document.getElementById("resourceList");
-  if(DATA.resources.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>Add books, communities, or hotlines you trust.</div>'; return; }
-  el.innerHTML = DATA.resources.map(r=>`
+  if(AT().resources.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>Add books, communities, or hotlines you trust.</div>'; return; }
+  el.innerHTML = AT().resources.map(r=>`
     <div class="res-item">
       <div class="res-icon">${RES_ICONS[r.type]||RES_ICONS.link}</div>
       <div class="txt" style="flex:1;"><b>${r.url?`<a href="${escapeAttr(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.text)}</a>`:escapeHtml(r.text)}</b></div>
@@ -2119,19 +2632,19 @@ document.getElementById("resourceAddBtn").addEventListener("click", ()=>{
   const text = textEl.value.trim(); if(!text) return;
   const url = urlEl.value.trim();
   const type = /youtube\.com|youtu\.be/.test(url) ? "video" : (url ? "link" : "book");
-  DATA.resources.push({id:uid(), type, text, url});
+  AT().resources.push({id:uid(), type, text, url});
   textEl.value=""; urlEl.value="";
   save(); renderResources();
 });
 document.getElementById("resourceList").addEventListener("click",(e)=>{
   if(!e.target.classList.contains("resDel")) return;
-  DATA.resources = DATA.resources.filter(r=>r.id!==e.target.dataset.id);
+  AT().resources = AT().resources.filter(r=>r.id!==e.target.dataset.id);
   save(); renderResources();
 });
 
 /* ---------- settings ---------- */
 document.getElementById("settingUrgePrompt").addEventListener("change",(e)=>{
-  DATA.settings.urgePrompt = e.target.checked; save();
+  AT().settings.urgePrompt = e.target.checked; save();
 });
 document.getElementById("exportBtn").addEventListener("click", ()=>{
   const blob = new Blob([JSON.stringify(DATA,null,2)], {type:"application/json"});
@@ -2149,7 +2662,15 @@ document.getElementById("importFile").addEventListener("change",(e)=>{
   reader.onload = (ev)=>{
     try{
       const parsed = JSON.parse(ev.target.result);
-      DATA = Object.assign(defaultData(), parsed);
+      if(parsed.schemaVersion===2 && Array.isArray(parsed.trackers)){
+        DATA = Object.assign(defaultData(), parsed);
+        DATA.trackers = parsed.trackers;
+      } else if(parsed.firstUse || parsed.checkins){
+        // legacy v1 single-behavior backup
+        DATA = migrateV1(parsed);
+      } else {
+        throw new Error("unrecognized format");
+      }
       save(); applyTheme(); renderAll();
       showToast("Backup restored.");
     }catch(err){ showToast("Couldn't read that file — is it a Reset backup?"); }
@@ -2180,6 +2701,20 @@ function escapeAttr(s){ return escapeHtml(s); }
 
 /* ---------- render all ---------- */
 function renderAll(){
+  renderTracksSettings();
+  document.getElementById("settingAmbientVolume").value = DATA.ambient.volume;
+  document.getElementById("settingAmbientVolumeVal").textContent = Math.round(DATA.ambient.volume*100)+"%";
+  document.getElementById("emergencyNumber").value = DATA.emergency.localNumber;
+  document.getElementById("emergencyHelplineName").value = DATA.emergency.localHelplineName;
+  document.getElementById("emergencyHelplineLink").value = DATA.emergency.localHelplineLink;
+
+  if(DATA.trackers.length===0){
+    showOnboarding();
+    return;
+  }
+  document.getElementById("onboardBackdrop").classList.remove("open");
+  renderTrackerSwitcher();
+
   ensurePhysicalResetToday();
   renderHome();
   renderPhysicalList();
@@ -2193,17 +2728,18 @@ function renderAll(){
   renderRelapseList();
   renderPatterns();
   renderAuditList();
-  document.getElementById("partnerTemplate").value = DATA.partnerTemplate;
-  document.getElementById("whyText").value = DATA.why;
+  document.getElementById("partnerTemplate").value = AT().partnerTemplate;
+  document.getElementById("whyText").value = AT().why;
   renderBenefits();
   renderResources();
-  document.getElementById("settingUrgePrompt").checked = DATA.settings.urgePrompt;
+  document.getElementById("settingUrgePrompt").checked = AT().settings.urgePrompt;
 }
 
 /* ---------- init ---------- */
 applyTheme();
 renderAll();
 renderLibrary();
+initAmbient();
 
 })();
 </script>
