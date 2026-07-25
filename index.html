@@ -161,8 +161,21 @@ label.field:first-child{ margin-top:0; }
   border:1px solid rgba(255,182,39,0.22); background:linear-gradient(135deg, rgba(255,107,53,0.06), rgba(255,182,39,0.03));
 }
 .spark-card .spark-label{ display:flex; align-items:center; gap:6px; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--flame2); font-weight:700; margin-bottom:8px; }
-.spark-quote{ font-family:var(--font-display); font-size:1.1rem; line-height:1.5; color:var(--text); }
+.spark-quote{ font-family:var(--font-display); font-size:1.1rem; line-height:1.5; color:var(--text); transition:opacity .45s ease, transform .45s ease; }
+.spark-quote.fade-out{ opacity:0; transform:translateY(5px); }
 .spark-attr{ font-size:0.78rem; color:var(--text-faint); margin-top:8px; }
+.spark-quote-stage{ min-height:64px; display:flex; align-items:center; }
+.spark-progress{ height:3px; background:var(--bg-elev-2); border-radius:99px; margin-top:14px; overflow:hidden; }
+.spark-progress-bar{ height:100%; width:0%; background:linear-gradient(90deg, var(--flame1), var(--flame2)); border-radius:99px; }
+.spark-progress-bar.run{ animation:sparkfill 10s linear forwards; }
+.spark-progress-bar.paused{ animation-play-state:paused; }
+@keyframes sparkfill{ from{width:0%;} to{width:100%;} }
+.spark-toggle{
+  margin-left:auto; background:transparent; border:1px solid var(--line); color:var(--text-dim);
+  width:26px;height:26px;border-radius:50%; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; flex-shrink:0;
+}
+.spark-toggle:hover{ color:var(--text); border-color:var(--line-strong); }
 
 /* resource cards */
 .res-item{ display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--line); align-items:flex-start; }
@@ -322,6 +335,49 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
 }
 .toast.show{ opacity:1; transform:translateX(-50%) translateY(-4px); }
 
+.fab-urge{
+  position:fixed; right:16px; bottom:calc(78px + var(--safe-bottom)); z-index:12;
+  width:54px;height:54px;border-radius:50%; border:none; cursor:pointer;
+  background:linear-gradient(135deg, var(--flame1), var(--ember2)); color:#FFEECC;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 6px 18px rgba(184,56,13,0.4), 0 2px 6px rgba(0,0,0,0.25);
+  transition:transform .15s ease;
+}
+.fab-urge:active{ transform:scale(0.92); }
+.fab-urge svg{ width:24px;height:24px; }
+
+/* video library */
+.video-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width:460px){ .video-grid{ grid-template-columns:1fr; } }
+.video-card{
+  cursor:pointer; border:1px solid var(--line); border-radius:var(--radius-sm); overflow:hidden;
+  background:var(--bg-elev-2); transition:border-color .15s ease, transform .15s ease;
+}
+.video-card:hover{ border-color:var(--line-strong); }
+.video-card:active{ transform:scale(0.98); }
+.video-card:focus-visible{ outline:2px solid var(--teal-light); outline-offset:2px; }
+.video-thumb{ position:relative; width:100%; aspect-ratio:16/9; background:#000; overflow:hidden; }
+.video-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.video-play{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.video-play svg{ width:38px;height:38px; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
+.video-cat{
+  position:absolute; left:8px; top:8px; background:rgba(3,10,16,0.72); color:#fff; font-size:0.6rem;
+  text-transform:uppercase; letter-spacing:0.05em; padding:3px 8px; border-radius:99px; font-weight:600;
+}
+.video-info{ padding:10px 12px; }
+.video-info .v-title{ font-size:0.85rem; font-weight:600; line-height:1.35; color:var(--text); }
+.video-info .v-channel{ font-size:0.72rem; color:var(--text-faint); margin-top:3px; }
+
+/* article cards */
+.article-card{ display:block; padding:12px 0; border-bottom:1px solid var(--line); text-decoration:none; color:inherit; }
+.article-card:last-child{ border-bottom:none; }
+.article-card .art-title{ font-weight:600; font-size:0.92rem; color:var(--teal-light); }
+.article-card .art-meta{ font-size:0.7rem; color:var(--text-faint); text-transform:uppercase; letter-spacing:0.05em; margin-top:3px; }
+.article-card .art-desc{ font-size:0.84rem; color:var(--text-dim); margin-top:5px; line-height:1.5; }
+
+/* video modal */
+.video-modal-frame{ position:relative; width:100%; aspect-ratio:16/9; border-radius:var(--radius-sm); overflow:hidden; background:#000; }
+
 @media (prefers-reduced-motion: reduce){
   *{ animation-duration:0.001s !important; transition-duration:0.001s !important; }
 }
@@ -361,8 +417,14 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
     </div>
 
     <div class="card spark-card">
-      <div class="spark-label">✦ Daily spark</div>
-      <div class="spark-quote" id="sparkQuoteTxt">—</div>
+      <div class="spark-label">
+        <span>✦ Daily spark</span>
+        <button class="spark-toggle" id="sparkPauseBtn" aria-label="Pause quote slideshow" title="Pause slideshow">
+          <svg id="sparkPauseIcon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"></rect><rect x="14" y="5" width="4" height="14"></rect></svg>
+        </button>
+      </div>
+      <div class="spark-quote-stage"><div class="spark-quote" id="sparkQuoteTxt">—</div></div>
+      <div class="spark-progress"><div class="spark-progress-bar" id="sparkProgressBar"></div></div>
       <button class="btn ghost" id="sparkShuffleBtn" style="margin-top:12px;">Another one</button>
     </div>
 
@@ -761,7 +823,19 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
 
     <div class="subview" id="l-resources">
       <div class="card">
-        <h3>External resources</h3>
+        <h3>Video library</h3>
+        <p class="lead">A few short, well-regarded watches on the science and skills behind this. Tap one to play it right here.</p>
+        <div class="video-grid" id="libraryVideoGrid"></div>
+      </div>
+
+      <div class="card">
+        <h3>Worth reading</h3>
+        <p class="lead">External reads that go deeper than this app can. Opens in a new tab.</p>
+        <div id="libraryArticleList"></div>
+      </div>
+
+      <div class="card">
+        <h3>Your resources</h3>
         <p class="lead">A few starting points, plus room for your own. Remove anything that doesn't fit, add what does.</p>
         <div id="resourceList"></div>
         <div class="row" style="margin-top:12px;">
@@ -826,12 +900,25 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
   </div>
 </div>
 
+<button class="fab-urge" id="btnUrgeNowFab" aria-label="I'm having an urge — get help now" title="I'm having an urge">
+  <svg viewBox="0 0 32 32" fill="none"><path d="M16 2c1 5-5 6-5 11a5 5 0 0010 0c0-2-1-3-1-3s2 1 2 5a6 6 0 01-12 0c0-6 6-8 6-13z" fill="currentColor"/></svg>
+</button>
+
 <!-- Urge flow modal -->
 <div class="modal-backdrop" id="urgeModalBackdrop">
   <div class="modal">
     <button class="modal-close" id="urgeModalClose" aria-label="Close">&times;</button>
     <h3>Right now</h3>
     <div id="urgeModalBody"></div>
+  </div>
+</div>
+
+<!-- Video player modal -->
+<div class="modal-backdrop" id="videoModalBackdrop">
+  <div class="modal">
+    <button class="modal-close" id="videoModalClose" aria-label="Close">&times;</button>
+    <div class="video-modal-frame" id="videoModalFrame"></div>
+    <div id="videoModalMeta" style="padding-top:12px;"></div>
   </div>
 </div>
 
@@ -1200,15 +1287,56 @@ function dayOfYear(){
   const start=new Date(now.getFullYear(),0,0);
   return Math.floor((now-start)/86400000);
 }
-function renderSparkQuote(idxOverride){
-  const idx = idxOverride!==undefined ? idxOverride : (dayOfYear() % SPARK_QUOTES.length);
-  document.getElementById("sparkQuoteTxt").textContent = SPARK_QUOTES[idx];
-  window.__sparkIdx = idx;
+let sparkInterval = null;
+let sparkPaused = false;
+function isHomeVisible(){
+  const homeView = document.getElementById("view-home");
+  return !!homeView && homeView.classList.contains("active") && document.visibilityState==="visible";
+}
+function renderSparkQuote(idxOverride, animate){
+  const raw = idxOverride!==undefined ? idxOverride : dayOfYear();
+  const idx = ((raw % SPARK_QUOTES.length) + SPARK_QUOTES.length) % SPARK_QUOTES.length;
+  const el = document.getElementById("sparkQuoteTxt");
+  const apply = ()=>{
+    el.textContent = SPARK_QUOTES[idx];
+    window.__sparkIdx = idx;
+    el.classList.remove("fade-out");
+  };
+  if(animate){ el.classList.add("fade-out"); setTimeout(apply, 260); }
+  else apply();
+  restartSparkCycle();
+}
+function restartSparkCycle(){
+  if(sparkInterval) clearInterval(sparkInterval);
+  const bar = document.getElementById("sparkProgressBar");
+  if(bar){
+    bar.classList.remove("run");
+    void bar.offsetWidth; // force reflow so the fill animation restarts cleanly
+    bar.classList.toggle("paused", sparkPaused);
+    bar.classList.add("run");
+  }
+  // slideshow: advance to the next quote automatically every 10 seconds,
+  // but only while the Home view is on screen and the tab is visible.
+  sparkInterval = setInterval(()=>{
+    if(sparkPaused || !isHomeVisible()) return;
+    const next = (window.__sparkIdx===undefined ? dayOfYear() : window.__sparkIdx) + 1;
+    renderSparkQuote(next, true);
+  }, 10000);
 }
 document.getElementById("sparkShuffleBtn").addEventListener("click", ()=>{
   let idx;
   do{ idx = Math.floor(Math.random()*SPARK_QUOTES.length); }while(idx===window.__sparkIdx && SPARK_QUOTES.length>1);
-  renderSparkQuote(idx);
+  renderSparkQuote(idx, true);
+});
+document.getElementById("sparkPauseBtn").addEventListener("click", ()=>{
+  sparkPaused = !sparkPaused;
+  const btn = document.getElementById("sparkPauseBtn");
+  document.getElementById("sparkProgressBar").classList.toggle("paused", sparkPaused);
+  document.getElementById("sparkPauseIcon").innerHTML = sparkPaused
+    ? '<path d="M8 5v14l11-7z"></path>'
+    : '<rect x="6" y="5" width="4" height="14"></rect><rect x="14" y="5" width="4" height="14"></rect>';
+  btn.setAttribute("aria-label", sparkPaused ? "Resume quote slideshow" : "Pause quote slideshow");
+  btn.title = sparkPaused ? "Resume slideshow" : "Pause slideshow";
 });
 
 /* ---------- home render ---------- */
@@ -1439,6 +1567,81 @@ function logUrgeEntry(intensity, tool, outcome){
   DATA.urgeEntries.push({date:todayStr(), time:now.toTimeString().slice(0,5), intensity, tool, outcome});
   save();
 }
+
+document.getElementById("btnUrgeNowFab").addEventListener("click", ()=>{
+  document.getElementById("btnUrgeNow").click();
+});
+
+/* ---------- curated library: real, external videos & articles ---------- */
+const LIBRARY_VIDEOS = [
+  {id:"-moW9jvvMr4", title:"A Simple Way to Break a Bad Habit", channel:"TED · Judson Brewer", cat:"Understanding urges"},
+  {id:"lS3ddSQLLYs", title:"Addiction Explained: Rises & Falls in Dopamine", channel:"Huberman Lab Clips", cat:"The science"},
+  {id:"ASG1c1EqXyc", title:"Urge Surfing: Demonstration & Explanation by a Therapist", channel:"YouTube", cat:"Riding out a craving"},
+  {id:"IvtZBUSplr4", title:"The Space Between Self-Esteem and Self-Compassion", channel:"TEDx · Kristin Neff", cat:"After a slip"},
+  {id:"kZJjVmppvOQ", title:"Atomic Habits: 1% Better Every Day", channel:"TEDx · James Clear", cat:"Building new habits"}
+];
+const LIBRARY_ARTICLES = [
+  {title:"Drugs and the Brain", source:"NIDA", url:"https://nida.nih.gov/publications/drugs-brains-behavior-science-addiction/drugs-brain", cat:"The science", blurb:"How repeated overstimulation of the brain's reward circuit drives tolerance and compulsive use — from the U.S. National Institute on Drug Abuse."},
+  {title:"Relapse", source:"Psychology Today", url:"https://www.psychologytoday.com/us/basics/relapse", cat:"After a slip", blurb:"A clear overview of why relapse is common during recovery, and what tends to help most right after one happens."},
+  {title:"Urge Surfing: A 5-Step Mindfulness Tool", source:"PositivePsychology.com", url:"https://positivepsychology.com/urge-surfing/", cat:"Riding out a craving", blurb:"A step-by-step breakdown of the technique used in the Tools tab, plus the research behind why it works."},
+  {title:"What Is Self-Compassion?", source:"self-compassion.org", url:"https://self-compassion.org/what-is-self-compassion/", cat:"After a slip", blurb:"Dr. Kristin Neff's own explanation of the three components of self-compassion, in her words."}
+];
+function renderLibrary(){
+  const vGrid = document.getElementById("libraryVideoGrid");
+  if(vGrid){
+    vGrid.innerHTML = LIBRARY_VIDEOS.map((v,i)=>`
+      <div class="video-card" data-i="${i}" role="button" tabindex="0" aria-label="Play: ${escapeAttr(v.title)}">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" alt="" loading="lazy">
+          <span class="video-cat">${escapeHtml(v.cat)}</span>
+          <div class="video-play"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="rgba(3,10,16,0.55)"/><path d="M10 8l6 4-6 4V8z" fill="#fff"/></svg></div>
+        </div>
+        <div class="video-info">
+          <div class="v-title">${escapeHtml(v.title)}</div>
+          <div class="v-channel">${escapeHtml(v.channel)}</div>
+        </div>
+      </div>
+    `).join("");
+  }
+  const aList = document.getElementById("libraryArticleList");
+  if(aList){
+    aList.innerHTML = LIBRARY_ARTICLES.map(a=>`
+      <a class="article-card" href="${escapeAttr(a.url)}" target="_blank" rel="noopener">
+        <div class="art-title">${escapeHtml(a.title)} ↗</div>
+        <div class="art-meta">${escapeHtml(a.source)} · ${escapeHtml(a.cat)}</div>
+        <div class="art-desc">${escapeHtml(a.blurb)}</div>
+      </a>
+    `).join("");
+  }
+}
+function openVideoModal(v){
+  document.getElementById("videoModalFrame").innerHTML =
+    `<iframe src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0" title="${escapeAttr(v.title)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;"></iframe>`;
+  document.getElementById("videoModalMeta").innerHTML = `
+    <h3 style="margin-bottom:2px;">${escapeHtml(v.title)}</h3>
+    <div class="art-meta" style="margin-bottom:10px;">${escapeHtml(v.channel)}</div>
+    <a class="btn ghost" style="display:inline-block; text-decoration:none;" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+  `;
+  document.getElementById("videoModalBackdrop").classList.add("open");
+}
+function closeVideoModal(){
+  document.getElementById("videoModalBackdrop").classList.remove("open");
+  document.getElementById("videoModalFrame").innerHTML = ""; // stop playback
+}
+document.getElementById("videoModalClose").addEventListener("click", closeVideoModal);
+document.getElementById("videoModalBackdrop").addEventListener("click", (e)=>{ if(e.target.id==="videoModalBackdrop") closeVideoModal(); });
+document.getElementById("libraryVideoGrid")?.addEventListener("click", (e)=>{
+  const card = e.target.closest(".video-card");
+  if(!card) return;
+  openVideoModal(LIBRARY_VIDEOS[Number(card.dataset.i)]);
+});
+document.getElementById("libraryVideoGrid")?.addEventListener("keydown", (e)=>{
+  if(e.key!=="Enter" && e.key!==" ") return;
+  const card = e.target.closest(".video-card");
+  if(!card) return;
+  e.preventDefault();
+  openVideoModal(LIBRARY_VIDEOS[Number(card.dataset.i)]);
+});
 
 /* ---------- modal ---------- */
 function openModal(){ document.getElementById("urgeModalBackdrop").classList.add("open"); }
@@ -2000,6 +2203,7 @@ function renderAll(){
 /* ---------- init ---------- */
 applyTheme();
 renderAll();
+renderLibrary();
 
 })();
 </script>
