@@ -460,6 +460,7 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
   <!-- HOME -->
   <div class="view active" id="view-home">
     <div class="tracker-switcher" id="trackerSwitcher"></div>
+    <div class="withdrawal-warning" id="withdrawalBanner" style="display:none;"></div>
 
     <div class="flame-hero">
       <div class="flame-hero-inner">
@@ -544,6 +545,8 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
       <button class="tab" data-sub="tool-ground">Grounding</button>
       <button class="tab" data-sub="tool-halt">HALT check</button>
       <button class="tab" data-sub="tool-distract">Distraction toolkit</button>
+      <button class="tab" data-sub="tool-craving">Craving check</button>
+      <button class="tab" data-sub="tool-rp">Relapse prevention plan</button>
     </div>
 
     <div class="subview active" id="tool-breathe">
@@ -640,6 +643,34 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
         </div>
       </div>
     </div>
+
+    <div class="subview" id="tool-craving">
+      <div class="card">
+        <h3>Craving intensity check</h3>
+        <p class="lead">A quick, timestamped log — separate from a daily check-in, for whenever a craving hits. Feeds your patterns view over time.</p>
+        <div class="slider-row"><input type="range" min="0" max="10" value="5" id="cravingIntensity"><span class="slider-val mono" id="cravingIntensityVal">5</span></div>
+        <label class="field">Trigger (optional)</label>
+        <select id="cravingTrigger"><option value="">— none / not sure —</option></select>
+        <button class="btn block" id="cravingLogBtn" style="margin-top:12px;">Log this craving</button>
+        <div id="cravingRecent" style="margin-top:16px;"></div>
+      </div>
+    </div>
+
+    <div class="subview" id="tool-rp">
+      <div class="card">
+        <h3>Relapse prevention plan</h3>
+        <p class="lead">Fill this out when you're steady, so it's ready for you when you're not. Referenced from the "I'm having an urge" flow.</p>
+        <label class="field">My triggers</label>
+        <textarea id="rpTriggers" placeholder="What tends to set this off for me…"></textarea>
+        <label class="field">My early warning signs</label>
+        <textarea id="rpWarningSigns" placeholder="How I can tell I'm heading toward risk before it's urgent…"></textarea>
+        <label class="field">My go-to coping tools</label>
+        <textarea id="rpCopingTools" placeholder="What's actually worked for me before…"></textarea>
+        <label class="field">Who I call</label>
+        <textarea id="rpWhoToCall" placeholder="Names and how to reach them…"></textarea>
+        <button class="btn block" id="rpSaveBtn" style="margin-top:12px;">Save plan</button>
+      </div>
+    </div>
   </div>
 
   <!-- JOURNAL -->
@@ -708,6 +739,7 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
       <div class="card">
         <h3>Log a slip</h3>
         <p class="lead">This is data, not a verdict. No judgment here — just what happened.</p>
+        <div class="note-callout" id="relToleranceNote" style="display:none; margin-bottom:12px;"></div>
         <label class="field">Date</label>
         <input type="date" id="relDate">
         <label class="field">Time</label>
@@ -824,6 +856,65 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
         <button class="btn secondary block" id="partnerCopyBtn" style="margin-top:10px;">Copy to clipboard</button>
       </div>
     </div>
+
+    <div class="subview" id="g-withdrawal">
+      <div class="card">
+        <div class="withdrawal-warning">Alcohol and benzodiazepine (sedative) withdrawal can be medically dangerous — seizures and delirium tremens can be fatal in people who are physically dependent. If you drink daily or use sedatives regularly, talk to a doctor before stopping abruptly. This isn't true of most other substances, but medical support makes any withdrawal safer and more comfortable.</div>
+        <h3>What withdrawal can look like</h3>
+        <p class="lead"><b>Alcohol:</b> shakiness, sweating, anxiety, nausea and, in more dependent drinkers, risk of seizures or delirium tremens (confusion, hallucinations, dangerously high heart rate) — usually within 6–72 hours of the last drink. Medical detox exists specifically to manage this safely.</p>
+        <p class="lead"><b>Sedatives / benzodiazepines:</b> similar seizure risk to alcohol, especially with long-term daily use — never a "cold turkey" stop without medical guidance if you've been taking these regularly.</p>
+        <p class="lead"><b>Opioids:</b> flu-like symptoms, muscle aches, nausea, insomnia, intense discomfort — rarely medically dangerous on its own in an otherwise healthy adult, but genuinely miserable, and medically supervised tapering exists specifically to make it survivable.</p>
+        <p class="lead"><b>Stimulants:</b> a "crash" — fatigue, low mood, increased appetite, sleeping more than usual for several days.</p>
+        <p class="lead"><b>Cannabis / nicotine:</b> irritability, sleep disruption, and cravings that typically peak in the first week and ease over 2–4 weeks.</p>
+        <p class="lead" style="margin-top:8px;">If any of this feels like it applies to you, the next tab has language for starting that conversation with a doctor.</p>
+      </div>
+    </div>
+
+    <div class="subview" id="g-overdose">
+      <div class="card">
+        <h3>Recognizing an overdose</h3>
+        <p class="lead">General recognition and response — not instructions for using anything. If you ever see these signs in yourself or someone else, treat it as an emergency.</p>
+        <div class="note-callout" style="margin-bottom:12px;"><b>Tolerance drops fast during a break.</b> A lot of overdoses happen when someone returns to an amount that felt normal before they stopped, not realizing their tolerance had already fallen. This is one of the most common causes of overdose after a period of abstinence or a reduced-use stretch — it's worth knowing regardless of how a return to use happens.</div>
+        <p class="lead"><b>Opioids:</b> slowed or stopped breathing, blue or grey lips/fingertips, unresponsive to shouting or a firm sternum rub, pinpoint pupils, choking or gurgling sounds.</p>
+        <p class="lead"><b>Depressants (alcohol, sedatives) — especially combined:</b> extreme drowsiness or unresponsiveness, slow or shallow breathing, vomiting while unresponsive (aspiration risk).</p>
+        <p class="lead"><b>Stimulants:</b> chest pain, seizure, extremely high body temperature, severe agitation or paranoia, irregular heartbeat.</p>
+        <h3 style="margin-top:16px;">What to do</h3>
+        <div class="guide-step"><span class="num">1</span><span class="txt">Call your local emergency number immediately — don't wait to see if it passes.</span></div>
+        <div class="guide-step"><span class="num">2</span><span class="txt">Stay with the person. Never leave someone to "sleep it off."</span></div>
+        <div class="guide-step"><span class="num">3</span><span class="txt">If they're breathing but unresponsive, the recovery position (on their side, head tilted back slightly) helps keep their airway clear.</span></div>
+        <div class="guide-step"><span class="num">4</span><span class="txt">If naloxone is available and you're trained to use it, use it for a suspected opioid overdose — still call emergency services either way, since naloxone can wear off before the opioid does.</span></div>
+        <div class="note-callout" style="margin-top:12px;">Most places have Good Samaritan laws that protect people who call for help during an overdose from drug-possession charges — check what applies where you are, but don't let uncertainty stop the call.</div>
+      </div>
+    </div>
+
+    <div class="subview" id="g-doctor">
+      <div class="card">
+        <h3>Talking to a doctor</h3>
+        <p class="lead">You don't need to have it all figured out before this conversation, and you don't need to disclose more than you're comfortable with to get useful help.</p>
+        <h3 style="margin-top:14px;">Opening it</h3>
+        <p class="lead">A simple, honest opener works: <i>"I've been using [substance] more than I want to, and I'd like some support cutting down or stopping safely."</i> Doctors hear this regularly — you don't need a dramatic lead-in.</p>
+        <h3 style="margin-top:14px;">Questions worth asking</h3>
+        <div class="guide-step"><span class="num">•</span><span class="txt">"Is it safe for me to stop on my own, or should this be medically supervised?"</span></div>
+        <div class="guide-step"><span class="num">•</span><span class="txt">"Is a supervised taper an option, instead of stopping all at once?"</span></div>
+        <div class="guide-step"><span class="num">•</span><span class="txt">"Are there medications that can help with cravings or withdrawal symptoms?"</span></div>
+        <div class="guide-step"><span class="num">•</span><span class="txt">"Can you refer me to an addiction specialist or a program near me?"</span></div>
+        <div class="guide-step"><span class="num">•</span><span class="txt">"What should I do if I'm worried about withdrawal being dangerous?"</span></div>
+        <p class="lead" style="margin-top:10px;">Medically supervised tapering exists precisely because stopping some substances abruptly can be harder or riskier than stopping gradually with support — asking about it isn't giving up on quitting, it's making the plan safer.</p>
+      </div>
+    </div>
+
+    <div class="subview" id="g-harmreduction">
+      <div class="card">
+        <h3>Harm reduction basics</h3>
+        <p class="lead">Principles, not instructions — this app never gives dosing, sourcing, timing, or combination guidance. If moderation or staying safer while using is your goal right now, these principles apply regardless.</p>
+        <div class="guide-step"><span class="num">•</span><span class="txt">Avoid using alone when possible — someone should be able to notice and respond if something goes wrong.</span></div>
+        <div class="guide-step"><span class="num">•</span><span class="txt">Avoid combining depressants (alcohol, sedatives, opioids) — combining them is a major factor in overdose deaths.</span></div>
+        <div class="guide-step"><span class="num">•</span><span class="txt">Remember tolerance drops fast after any break — a "normal" amount from before can be far riskier now.</span></div>
+        <div class="guide-step"><span class="num">•</span><span class="txt">Keep naloxone accessible where it's legally available and you know how to use it, if opioids are involved for you or someone around you.</span></div>
+        <div class="guide-step"><span class="num">•</span><span class="txt">Tell someone what's going on — a friend, partner, or family member who could recognize a problem and get help.</span></div>
+        <p class="lead" style="margin-top:10px;">Harm reduction and abstinence are both legitimate goals — see the Learn tab for more on how to think about which one fits you right now.</p>
+      </div>
+    </div>
   </div>
 
   <!-- LEARN -->
@@ -833,6 +924,10 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
       <button class="tab" data-sub="l-dopamine">Dopamine & tolerance</button>
       <button class="tab" data-sub="l-why">Your why</button>
       <button class="tab" data-sub="l-benefits">Benefits timeline</button>
+      <button class="tab" data-sub="l-stages">Stages of change</button>
+      <button class="tab" data-sub="l-harmreduction">Harm reduction vs. abstinence</button>
+      <button class="tab" data-sub="l-substances">Substance categories</button>
+      <button class="tab" data-sub="l-smart">SMART Recovery</button>
       <button class="tab" data-sub="l-resources">Resources</button>
       <button class="tab" data-sub="l-faq">Myths & FAQ</button>
     </div>
@@ -881,6 +976,55 @@ details.platform .body{ padding-top:10px; font-size:0.85rem; color:var(--text-di
           <input type="text" id="benefitNewText" placeholder="Add or edit an entry…">
           <button class="btn secondary" id="benefitAddBtn">Add</button>
         </div>
+      </div>
+    </div>
+
+    <div class="subview" id="l-stages">
+      <div class="card">
+        <h3>Stages of change</h3>
+        <p class="lead">Ambivalence about changing is a normal stage, not a failure to want it badly enough. This is a private reflection, not a diagnosis or a score — just a way to notice where you actually are right now.</p>
+        <div id="stagesGrid" style="display:flex; flex-direction:column; gap:8px; margin:14px 0;">
+          <button class="cat-opt" data-stage="precontemplation">Precontemplation — not really thinking about changing yet</button>
+          <button class="cat-opt" data-stage="contemplation">Contemplation — aware it's a problem, weighing whether to act</button>
+          <button class="cat-opt" data-stage="preparation">Preparation — planning to act soon, maybe taking small steps</button>
+          <button class="cat-opt" data-stage="action">Action — actively changing the behavior right now</button>
+          <button class="cat-opt" data-stage="maintenance">Maintenance — sustaining the change, working to prevent relapse</button>
+        </div>
+        <p class="lead">People move back and forth between these stages, sometimes more than once, before change sticks — that's the normal shape of it, not a sign it isn't working.</p>
+      </div>
+    </div>
+
+    <div class="subview" id="l-harmreduction">
+      <div class="card">
+        <h3>Harm reduction vs. abstinence</h3>
+        <p class="lead">Both are legitimate goals. Neither is "the" answer — what matters is which one actually fits your situation right now.</p>
+        <p class="lead"><b>Abstinence</b> means stopping entirely. It removes the substance or behavior from the equation, which some people find is the only thing that reliably works for them — no negotiating with cravings about "just this once."</p>
+        <p class="lead"><b>Harm reduction</b> means reducing the risks and negative consequences of use without requiring abstinence as the goal — moderation, safer-use practices, or simply using less than before. It meets people where they are, and evidence shows it keeps people safer and more engaged with support than an all-or-nothing approach that some people quietly opt out of entirely.</p>
+        <p class="lead">You can change your mind. Someone might start with harm reduction and move toward abstinence later, or the reverse — this app's goal-type setting per track can be updated any time in Settings, and neither direction is a failure of the other.</p>
+      </div>
+    </div>
+
+    <div class="subview" id="l-substances">
+      <div class="card">
+        <h3>Substance categories, plainly explained</h3>
+        <p class="lead">General risk profile only — no dosing, timing, or use guidance.</p>
+        <p class="lead"><b>Depressants</b> (alcohol, benzodiazepines/sedatives) slow down the central nervous system. Regular heavy use can lead to physical dependence where stopping abruptly is dangerous — see the Withdrawal safety guide.</p>
+        <p class="lead"><b>Opioids</b> (heroin, fentanyl, prescription painkillers misused) act on the body's pain and reward pathways. Overdose risk centers on slowed or stopped breathing, and rises sharply after any period of reduced tolerance.</p>
+        <p class="lead"><b>Stimulants</b> (cocaine, methamphetamine, misused prescription stimulants) speed up the central nervous system. Risks include cardiovascular strain, and a "crash" period of low mood and fatigue is common during withdrawal.</p>
+        <p class="lead"><b>Cannabis</b> affects mood, perception, and appetite; dependence is less physically dangerous to stop than the categories above, though withdrawal discomfort and cravings are real for regular users.</p>
+        <p class="lead"><b>Nicotine</b> is highly habit-forming with a short craving cycle, which is part of why it's often harder to quit than its physical health risk alone would suggest.</p>
+      </div>
+    </div>
+
+    <div class="subview" id="l-smart">
+      <div class="card">
+        <h3>SMART Recovery's 4-Point Program</h3>
+        <p class="lead">SMART Recovery is free, secular, and CBT-based, and explicitly covers any addictive behavior — substances and behavioral habits alike — with meetings online worldwide. It's not a replacement for 12-step programs like AA/NA, just a different framework; some people prefer one, some the other, some use both.</p>
+        <div class="guide-step"><span class="num">1</span><span class="txt"><b>Building and maintaining motivation</b> — getting clear on your own reasons for changing, and keeping them visible when motivation dips.</span></div>
+        <div class="guide-step"><span class="num">2</span><span class="txt"><b>Coping with urges</b> — recognizing and riding out cravings rather than being ruled by them (this app's urge-surfing and delay tools map directly onto this point).</span></div>
+        <div class="guide-step"><span class="num">3</span><span class="txt"><b>Managing thoughts, feelings, and behaviors</b> — noticing the thinking patterns that drive use, and building other ways to handle difficult emotions.</span></div>
+        <div class="guide-step"><span class="num">4</span><span class="txt"><b>Living a balanced life</b> — building a life with enough other sources of meaning and pleasure that the addictive behavior isn't carrying all the weight.</span></div>
+        <p class="lead" style="margin-top:10px;"><a href="https://www.smartrecovery.org" target="_blank" rel="noopener">smartrecovery.org</a> has free online meetings and a handbook that goes deeper into each point.</p>
       </div>
     </div>
 
@@ -1062,6 +1206,7 @@ const TRACKER_CATEGORIES = [
   {key:"stimulants", label:"Stimulants", kind:"substance"},
   {key:"sedatives", label:"Sedatives / benzodiazepines", kind:"substance"},
   {key:"cannabis", label:"Cannabis", kind:"substance"},
+  {key:"nicotine", label:"Nicotine / vaping", kind:"substance"},
   {key:"substance_other", label:"Other substance", kind:"substance"},
   {key:"pornography", label:"Pornography / compulsive sexual behavior", kind:"behavioral"},
   {key:"gambling", label:"Gambling", kind:"behavioral"},
@@ -1071,6 +1216,7 @@ const TRACKER_CATEGORIES = [
   {key:"behavioral_other", label:"Other behavior", kind:"behavioral"}
 ];
 function categoryMeta(key){ return TRACKER_CATEGORIES.find(c=>c.key===key) || TRACKER_CATEGORIES[TRACKER_CATEGORIES.length-1]; }
+function isSubstanceCat(key){ return categoryMeta(key).kind === "substance"; }
 // alcohol & sedatives carry the withdrawal-danger warning (rule #2)
 const WITHDRAWAL_RISK_CATS = new Set(["alcohol","sedatives"]);
 // categories where an environment/DNS/app-blocker style guide still applies
@@ -1094,7 +1240,7 @@ function defaultResourcesFor(catKey){
       {id:uid(), type:"community", text:"Fight the New Drug — research and stories", url:"https://fightthenewdrug.org"}
     ]);
   }
-  if(catKey==="alcohol" || catKey==="opioids" || catKey==="stimulants" || catKey==="sedatives" || catKey==="cannabis" || catKey==="substance_other"){
+  if(catKey==="alcohol" || catKey==="opioids" || catKey==="stimulants" || catKey==="sedatives" || catKey==="cannabis" || catKey==="nicotine" || catKey==="substance_other"){
     return shared.concat([
       {id:uid(), type:"community", text:"Alcoholics Anonymous — worldwide fellowship & meeting finder", url:"https://www.aa.org"},
       {id:uid(), type:"community", text:"Narcotics Anonymous — worldwide fellowship & meeting finder", url:"https://www.na.org"},
@@ -1151,6 +1297,7 @@ function defaultTracker(catKey, label, goalType){
       {id:"a4", text:"Identified specific people/places I'll avoid for now", done:false}
     ],
     rpPlan: { triggers:"", warningSigns:"", copingTools:"", whoToCall:"" },
+    stageOfChange: null,
     seenMilestones: [],
     resources: defaultResourcesFor(catKey),
     partnerTemplate: "Hey — I'm working on quitting a habit I'm not proud of, and I could use someone in my corner. Would you be open to checking in with me once a week, just a quick \"how's it going\"? No judgment needed, just someone who knows what I'm working on.",
@@ -1451,7 +1598,7 @@ function renderCrisisModal(){
   const helplineHref = /^https?:\/\//.test(em.localHelplineLink||"") ? em.localHelplineLink : ("tel:"+String(em.localHelplineLink||"").replace(/[^\d+]/g,""));
   const helplineBtn = (em.localHelplineName && em.localHelplineLink) ? `<a class="btn secondary block" href="${escapeAttr(helplineHref)}" target="_blank" rel="noopener" style="display:block; text-align:center; text-decoration:none; margin-bottom:10px;">${escapeHtml(em.localHelplineName)}</a>` : "";
   document.getElementById("crisisModalBody").innerHTML = `
-    <p class="note-callout" style="margin-bottom:14px;">In a medical emergency, call your local emergency number.</p>
+    <p class="withdrawal-warning" style="margin-bottom:14px;"><b>In a medical emergency, call your local emergency number.</b></p>
     ${localBtn}${helplineBtn}
     ${(!em.localNumber && !em.localHelplineName) ? '<p class="lead">Save your own local emergency number and helpline in Settings so they show up here as one-tap buttons.</p>' : ""}
     <div class="res-item">
@@ -2037,8 +2184,13 @@ function showUrgeSuggestion(intensity){
     <p class="lead">Suggested: <b>${toolLabel}</b></p>
     <p class="lead">${toolDesc}</p>
     <button class="btn block" id="urgeGoToTool" style="margin-bottom:10px;">Open ${toolLabel}</button>
-    <button class="btn secondary block" id="urgeLogOutcome">Just log the outcome</button>
+    <button class="btn secondary block" id="urgeLogOutcome" style="margin-bottom:10px;">Just log the outcome</button>
+    <button class="btn secondary block" id="urgeGoToRp">View my relapse prevention plan</button>
   `;
+  document.getElementById("urgeGoToRp").addEventListener("click", ()=>{
+    closeModal();
+    goToRpPlan();
+  });
   document.getElementById("urgeGoToTool").addEventListener("click", ()=>{
     closeModal();
     document.querySelector('.navbtn[data-view="view-tools"]').click();
@@ -2076,6 +2228,54 @@ function logUrgeEntry(intensity, tool, outcome){
   const now=new Date();
   AT().urgeEntries.push({date:todayStr(), time:now.toTimeString().slice(0,5), intensity, tool, outcome});
   save();
+}
+
+/* ---------- craving intensity check ---------- */
+const cravingSlider = document.getElementById("cravingIntensity");
+cravingSlider.addEventListener("input", ()=> document.getElementById("cravingIntensityVal").textContent = cravingSlider.value);
+document.getElementById("cravingLogBtn").addEventListener("click", ()=>{
+  const t = AT(); if(!t) return;
+  const intensity = Number(cravingSlider.value);
+  const triggerId = document.getElementById("cravingTrigger").value || null;
+  const now = new Date();
+  t.urgeEntries.push({date:todayStr(), time:now.toTimeString().slice(0,5), intensity, tool:"craving-check", outcome:null, triggerId});
+  save();
+  showToast("Logged.");
+  renderCravingRecent();
+});
+function renderCravingRecent(){
+  const t = AT(); const el = document.getElementById("cravingRecent"); if(!t || !el) return;
+  const recent = t.urgeEntries.filter(u=>u.tool==="craving-check").slice(-5).reverse();
+  if(recent.length===0){ el.innerHTML = '<div class="empty"><div class="wave">〰</div>No craving checks logged yet.</div>'; return; }
+  el.innerHTML = `<h3 style="font-size:0.9rem;">Recent</h3>` + recent.map(r=>{
+    const trig = r.triggerId ? (t.triggers.find(x=>x.id===r.triggerId)||{}).text : null;
+    return `<div class="track-item"><div class="txt"><b>${r.intensity}/10</b><div class="meta">${escapeHtml(r.date)} ${escapeHtml(r.time)}${trig?" · "+escapeHtml(trig):""}</div></div></div>`;
+  }).join("");
+}
+
+/* ---------- relapse prevention plan ---------- */
+function renderRpPlan(){
+  const t = AT(); if(!t) return;
+  document.getElementById("rpTriggers").value = t.rpPlan.triggers;
+  document.getElementById("rpWarningSigns").value = t.rpPlan.warningSigns;
+  document.getElementById("rpCopingTools").value = t.rpPlan.copingTools;
+  document.getElementById("rpWhoToCall").value = t.rpPlan.whoToCall;
+}
+document.getElementById("rpSaveBtn").addEventListener("click", ()=>{
+  const t = AT(); if(!t) return;
+  t.rpPlan = {
+    triggers: document.getElementById("rpTriggers").value,
+    warningSigns: document.getElementById("rpWarningSigns").value,
+    copingTools: document.getElementById("rpCopingTools").value,
+    whoToCall: document.getElementById("rpWhoToCall").value
+  };
+  save();
+  showToast("Plan saved.");
+});
+function goToRpPlan(){
+  document.querySelector('.navbtn[data-view="view-tools"]').click();
+  const tabBtn = document.querySelector('.tab[data-sub="tool-rp"]');
+  if(tabBtn) tabBtn.click();
 }
 
 document.getElementById("btnUrgeNowFab").addEventListener("click", ()=>{
@@ -2389,6 +2589,8 @@ function renderJournalEntry(){
   document.getElementById("jHelped").value = existing.helped || "";
   document.getElementById("jUrgeRow").style.display = AT().settings.urgePrompt ? "flex":"none";
   document.getElementById("jUrgeLabel").style.display = AT().settings.urgePrompt ? "block":"none";
+  document.getElementById("jUrgeLabel").textContent = isSubstanceCat(AT().category)
+    ? "Craving intensity today (0 = none)" : "Urge intensity today (0 = none)";
 }
 document.getElementById("jUrge").addEventListener("input", (e)=> document.getElementById("jUrgeVal").textContent=e.target.value);
 document.getElementById("jSave").addEventListener("click", ()=>{
@@ -2446,6 +2648,7 @@ function renderTriggerSelects(){
   const opts = `<option value="">— none —</option>` + AT().triggers.map(t=>`<option value="${t.id}">${escapeHtml(t.text)} (${t.cat})</option>`).join("");
   document.getElementById("planTrigger").innerHTML = opts;
   document.getElementById("relTrigger").innerHTML = `<option value="">— select or leave blank —</option>` + AT().triggers.map(t=>`<option value="${t.id}">${escapeHtml(t.text)} (${t.cat})</option>`).join("");
+  document.getElementById("cravingTrigger").innerHTML = `<option value="">— none / not sure —</option>` + AT().triggers.map(t=>`<option value="${t.id}">${escapeHtml(t.text)} (${t.cat})</option>`).join("");
 }
 
 /* ---------- if/then plans ---------- */
@@ -2699,7 +2902,66 @@ function escapeHtml(s){
 }
 function escapeAttr(s){ return escapeHtml(s); }
 
-/* ---------- render all ---------- */
+/* ---------- tolerance-drop note on the relapse log tab ---------- */
+function renderRelapseToleranceNote(){
+  const t = AT(); const el = document.getElementById("relToleranceNote"); if(!t || !el) return;
+  if(isSubstanceCat(t.category)){
+    el.style.display = "block";
+    el.textContent = "If this involved using again after time off: tolerance drops fast during a break, so an amount that felt normal before can be far riskier now. Worth keeping in mind either way.";
+  } else {
+    el.style.display = "none";
+  }
+}
+
+/* ---------- guides: category-conditional tabs ---------- */
+function renderGuidesTabs(){
+  const t = AT(); if(!t) return;
+  const tabsEl = document.getElementById("guidesTabs");
+  const subs = document.querySelectorAll("#view-guides .subview");
+  let html = `<button class="tab active" data-sub="g-audit">Environment audit</button>`;
+  if(isSubstanceCat(t.category)){
+    html += `<button class="tab" data-sub="g-withdrawal">Withdrawal safety</button>`;
+    html += `<button class="tab" data-sub="g-overdose">Overdose recognition</button>`;
+    html += `<button class="tab" data-sub="g-doctor">Talking to a doctor</button>`;
+    html += `<button class="tab" data-sub="g-harmreduction">Harm reduction basics</button>`;
+  } else {
+    html += `<button class="tab" data-sub="g-dns">DNS blocking</button>`;
+    html += `<button class="tab" data-sub="g-app">App blockers</button>`;
+    html += `<button class="tab" data-sub="g-ext">Free / lightweight</button>`;
+  }
+  html += `<button class="tab" data-sub="g-partner">Accountability</button>`;
+  tabsEl.innerHTML = html;
+  subs.forEach(sv=>sv.classList.remove("active"));
+  document.getElementById("g-audit").classList.add("active");
+}
+
+/* ---------- stages of change (private reflection, not a diagnosis) ---------- */
+function renderStages(){
+  const t = AT(); if(!t) return;
+  document.querySelectorAll("#stagesGrid .cat-opt").forEach(b=>{
+    b.classList.toggle("selected", b.dataset.stage===t.stageOfChange);
+  });
+}
+document.getElementById("stagesGrid").addEventListener("click",(e)=>{
+  const b = e.target.closest(".cat-opt"); if(!b) return;
+  const t = AT(); if(!t) return;
+  t.stageOfChange = (t.stageOfChange===b.dataset.stage) ? null : b.dataset.stage;
+  save(); renderStages();
+});
+
+
+function renderWithdrawalBanner(){
+  const t = AT(); const el = document.getElementById("withdrawalBanner");
+  if(!t || !el) return;
+  if(WITHDRAWAL_RISK_CATS.has(t.category)){
+    el.style.display = "block";
+    el.textContent = "Stopping alcohol or sedatives abruptly can be medically dangerous if you use regularly — see Guides → Withdrawal safety, and consider talking to a doctor before a quit attempt.";
+  } else {
+    el.style.display = "none";
+  }
+}
+
+
 function renderAll(){
   renderTracksSettings();
   document.getElementById("settingAmbientVolume").value = DATA.ambient.volume;
@@ -2716,7 +2978,9 @@ function renderAll(){
   renderTrackerSwitcher();
 
   ensurePhysicalResetToday();
+  renderWithdrawalBanner();
   renderHome();
+  renderGuidesTabs();
   renderPhysicalList();
   renderHalt();
   renderDistractList();
@@ -2726,12 +2990,16 @@ function renderAll(){
   renderTriggers();
   renderPlans();
   renderRelapseList();
+  renderRelapseToleranceNote();
   renderPatterns();
   renderAuditList();
   document.getElementById("partnerTemplate").value = AT().partnerTemplate;
   document.getElementById("whyText").value = AT().why;
   renderBenefits();
   renderResources();
+  renderStages();
+  renderCravingRecent();
+  renderRpPlan();
   document.getElementById("settingUrgePrompt").checked = AT().settings.urgePrompt;
 }
 
