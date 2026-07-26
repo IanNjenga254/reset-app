@@ -1224,7 +1224,7 @@ const BLOCKER_RELEVANT_CATS = new Set(["pornography","gaming","social","gambling
 
 function defaultResourcesFor(catKey){
   const shared = [
-    {id:uid(), type:"community", text:"SMART Recovery — free, secular, evidence-based, any addictive behavior", url:"https://www.smartrecovery.org"}
+    {id:uid(), type:"community", text:"SMART Recovery — free, secular, evidence-based, any addictive behavior, online worldwide", url:"https://www.smartrecovery.org"}
   ];
   if(catKey==="pornography"){
     return shared.concat([
@@ -1240,16 +1240,81 @@ function defaultResourcesFor(catKey){
       {id:uid(), type:"community", text:"Fight the New Drug — research and stories", url:"https://fightthenewdrug.org"}
     ]);
   }
-  if(catKey==="alcohol" || catKey==="opioids" || catKey==="stimulants" || catKey==="sedatives" || catKey==="cannabis" || catKey==="nicotine" || catKey==="substance_other"){
+  if(catKey==="alcohol"){
     return shared.concat([
-      {id:uid(), type:"community", text:"Alcoholics Anonymous — worldwide fellowship & meeting finder", url:"https://www.aa.org"},
-      {id:uid(), type:"community", text:"Narcotics Anonymous — worldwide fellowship & meeting finder", url:"https://www.na.org"},
-      {id:uid(), type:"book", text:"Dopamine Nation — Anna Lembke", url:""}
+      {id:uid(), type:"book", text:"This Naked Mind — Annie Grace", url:""},
+      {id:uid(), type:"book", text:"Alcohol Explained — William Porter", url:""},
+      {id:uid(), type:"book", text:"Quit Like a Woman — Holly Whitaker", url:""},
+      {id:uid(), type:"book", text:"Drinking: A Love Story — Caroline Knapp", url:""},
+      {id:uid(), type:"article", text:"Alcohol's Effects on Health — NIAAA (U.S. National Institute on Alcohol Abuse and Alcoholism)", url:"https://www.niaaa.nih.gov/alcohols-effects-health"},
+      {id:uid(), type:"community", text:"Alcoholics Anonymous — worldwide fellowship & meeting finder", url:"https://www.aa.org"}
+    ]);
+  }
+  if(catKey==="opioids"){
+    return shared.concat([
+      {id:uid(), type:"book", text:"In the Realm of Hungry Ghosts — Gabor Maté", url:""},
+      {id:uid(), type:"book", text:"Dopesick — Beth Macy", url:""},
+      {id:uid(), type:"article", text:"Opioids — National Institute on Drug Abuse (NIDA)", url:"https://nida.nih.gov/research-topics/opioids"},
+      {id:uid(), type:"community", text:"Narcotics Anonymous — worldwide fellowship & meeting finder", url:"https://www.na.org"}
+    ]);
+  }
+  if(catKey==="stimulants"){
+    return shared.concat([
+      {id:uid(), type:"book", text:"In the Realm of Hungry Ghosts — Gabor Maté", url:""},
+      {id:uid(), type:"book", text:"High Price — Carl Hart", url:""},
+      {id:uid(), type:"community", text:"Cocaine Anonymous — 12-step fellowship, open to stimulant use generally", url:"https://ca.org"},
+      {id:uid(), type:"community", text:"Narcotics Anonymous — worldwide fellowship & meeting finder", url:"https://www.na.org"}
+    ]);
+  }
+  if(catKey==="sedatives"){
+    return shared.concat([
+      {id:uid(), type:"book", text:"Dopamine Nation — Anna Lembke", url:""},
+      {id:uid(), type:"article", text:"Alcohol's Effects on Health — NIAAA (withdrawal risk profile is similar for sedatives)", url:"https://www.niaaa.nih.gov/alcohols-effects-health"},
+      {id:uid(), type:"community", text:"Alcoholics Anonymous — many sedative/benzo users attend alongside alcohol-focused members", url:"https://www.aa.org"}
+    ]);
+  }
+  if(catKey==="cannabis"){
+    return shared.concat([
+      {id:uid(), type:"article", text:"Cannabis (Marijuana) DrugFacts — NIDA", url:"https://nida.nih.gov/publications/drugfacts/cannabis-marijuana"},
+      {id:uid(), type:"community", text:"Marijuana Anonymous — 12-step fellowship & meeting finder", url:"https://marijuana-anonymous.org"}
+    ]);
+  }
+  if(catKey==="nicotine"){
+    return shared.concat([
+      {id:uid(), type:"community", text:"Smokefree.gov — free U.S. National Cancer Institute quit-smoking/vaping program", url:"https://smokefree.gov"},
+      {id:uid(), type:"community", text:"Nicotine Anonymous — 12-step fellowship & meeting finder", url:"https://nicotine-anonymous.org"}
+    ]);
+  }
+  if(catKey==="substance_other"){
+    return shared.concat([
+      {id:uid(), type:"book", text:"In the Realm of Hungry Ghosts — Gabor Maté", url:""},
+      {id:uid(), type:"community", text:"Narcotics Anonymous — worldwide fellowship, open to any drug", url:"https://www.na.org"}
     ]);
   }
   if(catKey==="gambling"){
     return shared.concat([
-      {id:uid(), type:"community", text:"Gamblers Anonymous", url:"https://www.gamblersanonymous.org"}
+      {id:uid(), type:"community", text:"Gamblers Anonymous — 12-step fellowship & meeting finder", url:"https://gamblersanonymous.org"},
+      {id:uid(), type:"community", text:"National Council on Problem Gambling — U.S. resources, helpline, self-assessment", url:"https://www.ncpgambling.org"}
+    ]);
+  }
+  if(catKey==="gaming"){
+    return shared.concat([
+      {id:uid(), type:"book", text:"Glow Kids — Nicholas Kardaras", url:""},
+      {id:uid(), type:"article", text:"Addictive behaviours: Gaming disorder — World Health Organization", url:"https://www.who.int/news-room/questions-and-answers/item/addictive-behaviours-gaming-disorder"},
+      {id:uid(), type:"community", text:"Game Quitters — online community for people cutting back on or quitting gaming", url:"https://gamequitters.com"}
+    ]);
+  }
+  if(catKey==="social"){
+    return shared.concat([
+      {id:uid(), type:"book", text:"Digital Minimalism — Cal Newport", url:""},
+      {id:uid(), type:"book", text:"How to Break Up with Your Phone — Catherine Price", url:""},
+      {id:uid(), type:"book", text:"Irresistible — Adam Alter", url:""}
+    ]);
+  }
+  if(catKey==="shopping"){
+    return shared.concat([
+      {id:uid(), type:"book", text:"To Buy or Not to Buy — April Lane Benson", url:""},
+      {id:uid(), type:"community", text:"Debtors Anonymous — 12-step fellowship & meeting finder", url:"https://debtorsanonymous.org"}
     ]);
   }
   return shared;
@@ -2283,24 +2348,38 @@ document.getElementById("btnUrgeNowFab").addEventListener("click", ()=>{
 });
 
 /* ---------- curated library: real, external videos & articles ---------- */
+/* forCats: ["all"] shows for every tracker; otherwise an array of category keys. */
 const LIBRARY_VIDEOS = [
-  {id:"-moW9jvvMr4", title:"A Simple Way to Break a Bad Habit", channel:"TED · Judson Brewer", cat:"Understanding urges"},
-  {id:"lS3ddSQLLYs", title:"Addiction Explained: Rises & Falls in Dopamine", channel:"Huberman Lab Clips", cat:"The science"},
-  {id:"ASG1c1EqXyc", title:"Urge Surfing: Demonstration & Explanation by a Therapist", channel:"YouTube", cat:"Riding out a craving"},
-  {id:"IvtZBUSplr4", title:"The Space Between Self-Esteem and Self-Compassion", channel:"TEDx · Kristin Neff", cat:"After a slip"},
-  {id:"kZJjVmppvOQ", title:"Atomic Habits: 1% Better Every Day", channel:"TEDx · James Clear", cat:"Building new habits"}
+  {id:"-moW9jvvMr4", title:"A Simple Way to Break a Bad Habit", channel:"TED · Judson Brewer", cat:"Understanding urges", forCats:["all"]},
+  {id:"PY9DcIMGxMs", title:"Everything You Think You Know About Addiction Is Wrong", channel:"TED · Johann Hari", cat:"The science", forCats:["all"]},
+  {id:"lS3ddSQLLYs", title:"Addiction Explained: Rises & Falls in Dopamine", channel:"Huberman Lab Clips", cat:"The science", forCats:["all"]},
+  {id:"jziP0CEgvOw", title:"The Neuroscience of Addiction: Our Dopamine Nation", channel:"Rich Roll Podcast · Anna Lembke, MD", cat:"The science", forCats:["all"]},
+  {id:"ASG1c1EqXyc", title:"Urge Surfing: Demonstration & Explanation by a Therapist", channel:"YouTube", cat:"Riding out a craving", forCats:["all"]},
+  {id:"IvtZBUSplr4", title:"The Space Between Self-Esteem and Self-Compassion", channel:"TEDx · Kristin Neff", cat:"After a slip", forCats:["all"]},
+  {id:"kZJjVmppvOQ", title:"Atomic Habits: 1% Better Every Day", channel:"TEDx · James Clear", cat:"Building new habits", forCats:["all"]},
+  {id:"t6ZLd0IfXPE", title:"How Anticipation Primes the Brain for Problem Gambling", channel:"TEDxYouth@RVA · Carolyn Hawley, PhD", cat:"Gambling", forCats:["gambling"]},
+  {id:"yfLp_vueUxY", title:"The Past, Present and Future of Nicotine Addiction", channel:"TED · Mitch Zeller", cat:"Nicotine", forCats:["nicotine"]}
 ];
 const LIBRARY_ARTICLES = [
-  {title:"Drugs and the Brain", source:"NIDA", url:"https://nida.nih.gov/publications/drugs-brains-behavior-science-addiction/drugs-brain", cat:"The science", blurb:"How repeated overstimulation of the brain's reward circuit drives tolerance and compulsive use — from the U.S. National Institute on Drug Abuse."},
-  {title:"Relapse", source:"Psychology Today", url:"https://www.psychologytoday.com/us/basics/relapse", cat:"After a slip", blurb:"A clear overview of why relapse is common during recovery, and what tends to help most right after one happens."},
-  {title:"Urge Surfing: A 5-Step Mindfulness Tool", source:"PositivePsychology.com", url:"https://positivepsychology.com/urge-surfing/", cat:"Riding out a craving", blurb:"A step-by-step breakdown of the technique used in the Tools tab, plus the research behind why it works."},
-  {title:"What Is Self-Compassion?", source:"self-compassion.org", url:"https://self-compassion.org/what-is-self-compassion/", cat:"After a slip", blurb:"Dr. Kristin Neff's own explanation of the three components of self-compassion, in her words."}
+  {title:"Drugs and the Brain", source:"NIDA", url:"https://nida.nih.gov/publications/drugs-brains-behavior-science-addiction/drugs-brain", cat:"The science", blurb:"How repeated overstimulation of the brain's reward circuit drives tolerance and compulsive use — from the U.S. National Institute on Drug Abuse.", forCats:["all"]},
+  {title:"Relapse", source:"Psychology Today", url:"https://www.psychologytoday.com/us/basics/relapse", cat:"After a slip", blurb:"A clear overview of why relapse is common during recovery, and what tends to help most right after one happens.", forCats:["all"]},
+  {title:"Urge Surfing: A 5-Step Mindfulness Tool", source:"PositivePsychology.com", url:"https://positivepsychology.com/urge-surfing/", cat:"Riding out a craving", blurb:"A step-by-step breakdown of the technique used in the Tools tab, plus the research behind why it works.", forCats:["all"]},
+  {title:"What Is Self-Compassion?", source:"self-compassion.org", url:"https://self-compassion.org/what-is-self-compassion/", cat:"After a slip", blurb:"Dr. Kristin Neff's own explanation of the three components of self-compassion, in her words.", forCats:["all"]},
+  {title:"Alcohol's Effects on Health", source:"NIAAA", url:"https://www.niaaa.nih.gov/alcohols-effects-health", cat:"Alcohol", blurb:"The U.S. National Institute on Alcohol Abuse and Alcoholism's science-based overview of drinking levels, effects, and alcohol use disorder.", forCats:["alcohol","sedatives"]},
+  {title:"Opioids", source:"NIDA", url:"https://nida.nih.gov/research-topics/opioids", cat:"Opioids", blurb:"An overview of the opioid crisis, safe prescribing, and overdose prevention from the National Institute on Drug Abuse.", forCats:["opioids"]},
+  {title:"Cannabis (Marijuana) DrugFacts", source:"NIDA", url:"https://nida.nih.gov/publications/drugfacts/cannabis-marijuana", cat:"Cannabis", blurb:"Effects, dependence, and withdrawal — a plain-language overview from the National Institute on Drug Abuse.", forCats:["cannabis"]},
+  {title:"Addictive Behaviours: Gaming Disorder", source:"World Health Organization", url:"https://www.who.int/news-room/questions-and-answers/item/addictive-behaviours-gaming-disorder", cat:"Gaming", blurb:"WHO's own Q&A on how gaming disorder is defined and diagnosed internationally.", forCats:["gaming"]},
+  {title:"National Council on Problem Gambling", source:"NCPG", url:"https://www.ncpgambling.org", cat:"Gambling", blurb:"Self-assessment tools, treatment options, and the National Problem Gambling Helpline.", forCats:["gambling"]}
 ];
 function renderLibrary(){
+  const t = AT();
+  const cat = t ? t.category : null;
+  const videos = LIBRARY_VIDEOS.filter(v => v.forCats.includes("all") || (cat && v.forCats.includes(cat)));
+  const articles = LIBRARY_ARTICLES.filter(a => a.forCats.includes("all") || (cat && a.forCats.includes(cat)));
   const vGrid = document.getElementById("libraryVideoGrid");
   if(vGrid){
-    vGrid.innerHTML = LIBRARY_VIDEOS.map((v,i)=>`
-      <div class="video-card" data-i="${i}" role="button" tabindex="0" aria-label="Play: ${escapeAttr(v.title)}">
+    vGrid.innerHTML = videos.map((v)=>`
+      <div class="video-card" data-id="${v.id}" role="button" tabindex="0" aria-label="Play: ${escapeAttr(v.title)}">
         <div class="video-thumb">
           <img src="https://img.youtube.com/vi/${v.id}/hqdefault.jpg" alt="" loading="lazy">
           <span class="video-cat">${escapeHtml(v.cat)}</span>
@@ -2315,7 +2394,7 @@ function renderLibrary(){
   }
   const aList = document.getElementById("libraryArticleList");
   if(aList){
-    aList.innerHTML = LIBRARY_ARTICLES.map(a=>`
+    aList.innerHTML = articles.map(a=>`
       <a class="article-card" href="${escapeAttr(a.url)}" target="_blank" rel="noopener">
         <div class="art-title">${escapeHtml(a.title)} ↗</div>
         <div class="art-meta">${escapeHtml(a.source)} · ${escapeHtml(a.cat)}</div>
@@ -2343,14 +2422,16 @@ document.getElementById("videoModalBackdrop").addEventListener("click", (e)=>{ i
 document.getElementById("libraryVideoGrid")?.addEventListener("click", (e)=>{
   const card = e.target.closest(".video-card");
   if(!card) return;
-  openVideoModal(LIBRARY_VIDEOS[Number(card.dataset.i)]);
+  const v = LIBRARY_VIDEOS.find(x=>x.id===card.dataset.id);
+  if(v) openVideoModal(v);
 });
 document.getElementById("libraryVideoGrid")?.addEventListener("keydown", (e)=>{
   if(e.key!=="Enter" && e.key!==" ") return;
   const card = e.target.closest(".video-card");
   if(!card) return;
   e.preventDefault();
-  openVideoModal(LIBRARY_VIDEOS[Number(card.dataset.i)]);
+  const v = LIBRARY_VIDEOS.find(x=>x.id===card.dataset.id);
+  if(v) openVideoModal(v);
 });
 
 /* ---------- modal ---------- */
@@ -2818,7 +2899,7 @@ document.getElementById("benefitsList").addEventListener("click",(e)=>{
 });
 
 /* ---------- resources ---------- */
-const RES_ICONS = {book:"📖", video:"▶", community:"👥", hotline:"☎", link:"🔗"};
+const RES_ICONS = {book:"📖", video:"▶", community:"👥", hotline:"☎", link:"🔗", article:"📰"};
 function renderResources(){
   const el = document.getElementById("resourceList");
   if(AT().resources.length===0){ el.innerHTML='<div class="empty"><div class="wave">〰</div>Add books, communities, or hotlines you trust.</div>'; return; }
@@ -3000,13 +3081,13 @@ function renderAll(){
   renderStages();
   renderCravingRecent();
   renderRpPlan();
+  renderLibrary();
   document.getElementById("settingUrgePrompt").checked = AT().settings.urgePrompt;
 }
 
 /* ---------- init ---------- */
 applyTheme();
 renderAll();
-renderLibrary();
 initAmbient();
 
 })();
